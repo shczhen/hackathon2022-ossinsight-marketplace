@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import { VariantType, useSnackbar } from 'notistack';
 
 import SQLTab from 'components/Tab/SQLTab';
 import JSTab from 'components/Tab/JSTab';
@@ -18,38 +19,24 @@ import axios from 'lib/axios';
 const MOCK_SQL_RESULT_JSON = {
   data: [
     {
-      id: 3121955081,
-      type: 'PushEvent',
-      created_at: '2015-09-06T04:14:43.000Z',
-      repo_id: 41986369,
-      repo_name: 'pingcap/tidb',
-      actor_id: 878009,
-      actor_login: 'ngaut',
-      language: '',
-      additions: 0,
-      deletions: 0,
-      action: '',
-      number: 0,
-      commit_id: '',
-      comment_id: 0,
-      org_login: 'pingcap',
-      org_id: 11855343,
-      state: '',
-      closed_at: '1970-01-01T00:00:00.000Z',
-      comments: 0,
-      pr_merged_at: '1970-01-01T00:00:00.000Z',
-      pr_merged: 0,
-      pr_changed_files: 0,
-      pr_review_comments: 0,
-      pr_or_issue_id: 0,
-      event_day: '2015-09-06T00:00:00.000Z',
-      event_month: '2015-09-01T00:00:00.000Z',
-      event_year: 2015,
-      push_size: 2,
-      push_distinct_size: 1,
-      creator_user_login: '',
-      creator_user_id: 0,
-      pr_or_issue_created_at: '1970-01-01T00:00:00.000Z',
+      actor_login: 'tiancaiamao',
+      comments: 9748,
+    },
+    {
+      actor_login: 'zz-jason',
+      comments: 9540,
+    },
+    {
+      actor_login: 'coocood',
+      comments: 8685,
+    },
+    {
+      actor_login: 'shenli',
+      comments: 8573,
+    },
+    {
+      actor_login: 'zimulala',
+      comments: 7382,
     },
   ],
 };
@@ -95,6 +82,10 @@ export default function NewRequestSection() {
   const [sqlResult, setSqlResult] = React.useState<any>(MOCK_SQL_RESULT_JSON);
   const [jsCodeValue, setJsCodeValue] = React.useState('');
   const [jsCodeResult, setJsCodeResult] = React.useState<any>(null);
+  const [echartValue, setEchartValue] = React.useState('');
+  const [echartResult, setEchartResult] = React.useState<any>(null);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -107,9 +98,16 @@ export default function NewRequestSection() {
     setResultTabValue(newValue);
   };
 
-  const handleJSCodeChange = (code: string) => {
-    setJsCodeValue(code);
-  };
+  const handleEditorInputChange =
+    (type: 'sql' | 'js' | 'echart') => (code: string) => {
+      if (type === 'sql') {
+        setSqlValue(code);
+      } else if (type === 'js') {
+        setJsCodeValue(code);
+      } else if (type === 'echart') {
+        setEchartValue(code);
+      }
+    };
 
   const handleSubmitJSCode = async () => {
     try {
@@ -120,7 +118,27 @@ export default function NewRequestSection() {
         })
         .then((res) => res.data);
       setJsCodeResult(data.result);
-    } catch (error) {
+    } catch (error: any) {
+      enqueueSnackbar(`${error?.response?.data?.error || error.message}`, {
+        variant: 'error',
+      });
+      console.error(error);
+    }
+  };
+
+  const handleSubmitEchartCode = async () => {
+    try {
+      const data = await axios
+        .post('/api/vm/echarts', {
+          scripts: echartValue,
+          data: jsCodeResult,
+        })
+        .then((res) => res.data);
+      setEchartResult(data.result);
+    } catch (error: any) {
+      enqueueSnackbar(`${error?.response?.data?.error || error.message}`, {
+        variant: 'error',
+      });
       console.error(error);
     }
   };
@@ -134,8 +152,8 @@ export default function NewRequestSection() {
           aria-label="basic tabs example"
         >
           <Tab label="SQL" {...a11yProps(0)} />
-          <Tab label="Scritps" {...a11yProps(1)} />
-          <Tab label="ECharts" {...a11yProps(2)} />
+          <Tab label="JS Scritps" {...a11yProps(1)} />
+          <Tab label="Options" {...a11yProps(2)} />
         </Tabs>
         <Box
           sx={{
@@ -162,6 +180,8 @@ export default function NewRequestSection() {
           </Button>
           <Button
             variant="contained"
+            disabled={echartValue === ''}
+            onClick={handleSubmitEchartCode}
             sx={{
               display: value === 2 ? 'inline-flex' : 'none',
             }}
@@ -180,10 +200,10 @@ export default function NewRequestSection() {
         <SQLTab />
       </Box>
       <Box display={value === 1 ? 'block' : 'none'}>
-        <JSTab onChange={handleJSCodeChange} />
+        <JSTab onChange={handleEditorInputChange('js')} />
       </Box>
       <Box display={value === 2 ? 'block' : 'none'}>
-        <EChartsTab />
+        <EChartsTab onChange={handleEditorInputChange('echart')} />
       </Box>
 
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -194,7 +214,7 @@ export default function NewRequestSection() {
         >
           <Tab label="query" {...a11yProps(0, 'result')} />
           <Tab label="results" {...a11yProps(1, 'result')} />
-          <Tab label="chart" {...a11yProps(2, 'result')} />
+          <Tab label="echart" {...a11yProps(2, 'result')} />
         </Tabs>
       </Box>
       <Box
@@ -210,7 +230,7 @@ export default function NewRequestSection() {
           <ResultJSTab data={jsCodeResult} />
         </Box>
         <Box display={resultTabValue === 2 ? 'block' : 'none'}>
-          <ResultEchartsTab />
+          <ResultEchartsTab data={echartResult} />
         </Box>
       </Box>
     </Box>

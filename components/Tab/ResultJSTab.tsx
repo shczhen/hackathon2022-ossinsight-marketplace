@@ -51,7 +51,11 @@ export default function ResultJSTab(props: ResultJSTabProps) {
   return (
     <Box>
       {/* <Typography> finish in xx.x s</Typography> */}
-      <BrowserOnlyReactJson src={props?.data || MOCK_JS_RESULT_JSON} />
+      {props?.data ? (
+        <BrowserOnlyReactJson src={props.data} />
+      ) : (
+        <Typography>Empty</Typography>
+      )}
     </Box>
   );
 }

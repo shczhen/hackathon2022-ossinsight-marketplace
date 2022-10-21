@@ -7,11 +7,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-  // const session = await unstable_getServerSession(req, res, authOptions);
-  // if (!session) {
-  //   res.status(401).end();
-  //   return;
-  // }
+  const session = await unstable_getServerSession(req, res, authOptions);
+  if (!session) {
+    res.status(401).end();
+    return;
+  }
 
   const { scripts, data } = req?.body || {};
 
@@ -30,10 +30,10 @@ export default async function handler(
 
   try {
     vm.runInContext(code, context);
-    res.status(200).json({ ...context });
   } catch (error: any) {
+    console.log(error);
     res.status(500).json({ error: error.message });
     return;
   }
-  vm.runInContext(code, context);
+  res.status(200).json({ ...context });
 }

@@ -15,10 +15,8 @@ const PLACEHOLDER = `/**
 */
 function main(data) {
  // Example:
- // const result = {};
- // const dataLength = data.length;
- // result.length = dataLength;
- // return result;
+ const result = data;
+ return result;
 };`;
 
 export interface JSTabProps {

@@ -15,11 +15,25 @@ export default async function handler(
 
   const { scripts, data } = req?.body || {};
 
-  const context = { data: ['test1', 'test2'], result: null };
+  const context = { data: data, result: null };
   vm.createContext(context); // Contextify the object.
 
-  const code = scripts;
-  vm.runInContext(code, context);
+  // Code Example:
+  // function main(data) {
+  // const dataLength = data.length;
+  // result.length = dataLength;
+  // return result;
+  // };
+  const code = `${scripts} result = option;`;
 
+  console.log(context);
+
+  try {
+    vm.runInContext(code, context);
+  } catch (error: any) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+    return;
+  }
   res.status(200).json({ ...context });
 }

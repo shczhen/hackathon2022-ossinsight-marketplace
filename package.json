@@ -20,6 +20,7 @@
     "@monaco-editor/react": "^4.4.6",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.10",
+    "echarts": "^5.4.0",
     "echarts-for-react": "^3.0.2",
     "next": "12.3.1",
     "next-auth": "^4.14.0",

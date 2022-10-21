@@ -7,6 +7,9 @@ import Tab from '@mui/material/Tab';
 
 import SQLTab from 'components/Tab/SQLTab';
 import JSTab from 'components/Tab/JSTab';
+import ResultSQLTab from 'components/Tab/ResultSQLTab';
+import ResultJSTab from 'components/Tab/ResultJSTab';
+import ResultEchartsTab from 'components/Tab/ResultEchartsTab';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -34,18 +37,26 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-function a11yProps(index: number) {
+function a11yProps(index: number, type = 'simple-tab') {
   return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    id: `${type}-${index}`,
+    'aria-controls': `${type}-${index}`,
   };
 }
 
 export default function NewRequestSection() {
   const [value, setValue] = React.useState(0);
+  const [resultTabValue, setResultTabValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const handleResultTabChange = (
+    event: React.SyntheticEvent,
+    newValue: number
+  ) => {
+    setResultTabValue(newValue);
   };
 
   return (
@@ -71,6 +82,34 @@ export default function NewRequestSection() {
       </Box>
       <Box display={value === 1 ? 'block' : 'none'}>
         <JSTab />
+      </Box>
+
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs
+          value={resultTabValue}
+          onChange={handleResultTabChange}
+          aria-label="result tabs"
+        >
+          <Tab label="query" {...a11yProps(0, 'result')} />
+          <Tab label="results" {...a11yProps(1, 'result')} />
+          <Tab label="chart" {...a11yProps(2, 'result')} />
+        </Tabs>
+      </Box>
+      <Box
+        sx={{
+          height: 500,
+          overflow: 'auto',
+        }}
+      >
+        <Box display={resultTabValue === 0 ? 'block' : 'none'}>
+          <ResultSQLTab />
+        </Box>
+        <Box display={resultTabValue === 1 ? 'block' : 'none'}>
+          <ResultJSTab />
+        </Box>
+        <Box display={resultTabValue === 2 ? 'block' : 'none'}>
+          <ResultEchartsTab />
+        </Box>
       </Box>
     </Box>
   );

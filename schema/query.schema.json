@@ -1,0 +1,178 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Query",
+  "type": "object",
+  "required": [
+    "name",
+    "parameters"
+  ],
+  "properties": {
+    "title": {
+      "description": "The title of query.",
+      "type": "string"
+    },
+    "name": {
+      "description": "Query name, default is generated base on the file path.",
+      "type": "string"
+    },
+    "public": {
+      "description": "Indicates if the query is public.",
+      "type": "boolean",
+      "default": false
+    },
+    "deprecated": {
+      "description": "Indicates if the query is deprecated",
+      "type": "boolean",
+      "default": false
+    },
+    "description": {
+      "description": "Query description for documentation.",
+      "type": "string"
+    },
+    "cache": {
+      "type": "object",
+      "description": "Indicates how to implement caching, no caching if not provide.",
+      "$ref": "#/definitions/Cache"
+    },
+    "prefetch": {
+      "type":"object",
+      "description": "Indicates how to implement prefetching, no prefetching if not provide.",
+      "$ref": "#/definitions/Prefetch"
+    },
+    "parameters": {
+      "description": "Query parameters.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Parameter"
+      }
+    },
+    "result": {
+      "description": "Query result.",
+      "$ref": "https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema"
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "Cache": {
+      "type": "object",
+      "description": "The options to control how to cache the query result.",
+      "required": ["ttl"],
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Cache key template.",
+          "default": "@query_name:@params"
+        },
+        "ttl": {
+          "type": "integer",
+          "description": "Time to live of the cache.",
+          "default": -1
+        },
+        "provider": {
+          "type": "string",
+          "description": "The cache feature provider.",
+          "enum": [
+            "NORMAL_TABLE", "CACHED_TABLE"
+          ],
+          "default": "NORMAL_TABLE"
+        },
+        "needsPrefetch": {
+          "type": "boolean",
+          "description": "Indicates if the query need prefetch in advance.",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "Prefetch": {
+      "type": "object",
+      "required": ["cron"],
+      "description": "The options to control how to schedule the prefetch jobs.",
+      "properties": {
+        "cron": {
+          "type": "string",
+          "description": "The cron expression to control when to execute the prefetch job.",
+          "pattern": "^(@(annually|yearly|monthly|weekly|daily|hourly|reboot|once))|(@every (\\d+(ns|us|µs|ms|s|m|h))+)|((((\\d+,)+\\d+|(\\d+(\\/|-)\\d+)|\\d+|\\*) ?){5,7})$"
+        },
+        "queue": {
+          "type": "string",
+          "description": "The queue that will be execute the prefetch jobs.",
+          "enum": ["MAIN", "REALTIME", "CONCURRENT"],
+          "default": "MAIN"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Parameter": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": {
+          "description": "The parameter name, which will be used as API request parameter's name.",
+          "type": "string"
+        },
+        "description": {
+          "description": "The parameter description, which will be display in the documentation.",
+          "type": "string"
+        },
+        "type": {
+          "description": "The parameter type.",
+          "type": "string",
+          "enum": ["boolean", "number", "string", "array"]
+        },
+        "defaultValue": {
+          "description": "The default value of parameter.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "option": {
+          "description": "The option definition of parameter.",
+          "type": "object",
+          "$ref": "#/definitions/ParameterOption"
+        },
+        "placeholder": {
+          "description": "The placeholder of the parameter in the template SQL, it will be replaced ",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ParameterOption": {
+      "type": "object",
+      "properties": {
+        "sql": {
+          "type": "string",
+          "description": "Get parameter values from the results of the SQL."
+        },
+        "query": {
+          "type": "string",
+          "description": "Get options from the results of the Query, which can use the query cache and prefetch feature."
+        },
+        "enums": {
+          "type": "array",
+          "description": "Get the options by enumerating the list.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mappings": {
+          "type": "object",
+          "description": "Get parameter values through mapping."
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

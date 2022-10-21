@@ -1,0 +1,17 @@
+{
+  "title": "Event total",
+  "name": "event-total",
+  "description": "The total number of events.",
+  "public": true,
+  "cache": {
+    "key": "events-total",
+    "ttl": -1,
+    "provider": "NORMAL_TABLE",
+    "onlyFromCache": true
+  },
+  "prefetch": {
+    "cron": "0 * * * * *",
+    "queue": "REALTIME"
+  },
+  "params": []
+}

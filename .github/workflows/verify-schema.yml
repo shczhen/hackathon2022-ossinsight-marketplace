@@ -1,0 +1,35 @@
+name: Verify Schema
+
+on:
+  - pull_request
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: v16.14.0
+          cache: 'yarn'
+          cache-dependency-path: 'yarn.lock'
+
+      - name: Install Dependencies
+        run: |
+          yarn install --pure-lockfile
+
+      - name: Verify Query Definition JSON
+        run: |
+          npm run validate:query-schema
+
+      - name: Verify Panel Definition JSON
+        run: |
+          npm run validate:panel-schema
+
+      - name: Verify Plugin Definition JSON
+        run: |
+          npm run validate:plugin-schema

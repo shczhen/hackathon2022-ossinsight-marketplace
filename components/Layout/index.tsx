@@ -4,12 +4,18 @@ import Box from '@mui/material/Box';
 import Header from 'components/Layout/Header';
 import SEO from 'components/Layout/Seo';
 
-export default function Layout(props: { children: React.ReactNode }) {
-  const { children } = props;
+export interface LayoutProps {
+  children: React.ReactNode;
+  title: string;
+  description: string;
+}
+
+export default function Layout(props: LayoutProps) {
+  const { children, title, description } = props;
   return (
     <>
       <Header />
-      <SEO />
+      <SEO title={title} description={description} />
       <Box
         sx={{
           width: '100%',

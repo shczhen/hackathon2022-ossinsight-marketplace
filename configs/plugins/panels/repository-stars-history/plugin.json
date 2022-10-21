@@ -1,0 +1,22 @@
+{
+    "title": "The repository stars history panel",
+    "name": "repository-stars-history-panel",
+    "type": "panel",
+    "topic": [
+        "repository"
+    ],
+    "description": "A panel for displaying historical trend graphs of open source repository stars.",
+    "query": {
+        "definition": "./query.json",
+        "template": "./template.sql",
+        "ignoreCache": true
+    },
+    "render": {
+        "cache": {
+            "ttl": 3600
+        },
+        "src": "./render.js"
+    },
+    "author": ["Mini256"],
+    "shared": true
+}

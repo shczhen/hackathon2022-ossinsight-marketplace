@@ -1,0 +1,104 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "title": "Plugin",
+    "required": [
+        "title",
+        "name",
+        "type"
+    ],
+    "properties": {
+        "title": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "type": {
+            "type": "string"
+        },
+        "topic": {
+            "type": "array"
+        },
+        "description": {
+            "type": "string"
+        },
+        "query": {
+            "type": "object",
+            "required": [
+                "definition",
+                "template"
+            ],
+            "properties": {
+                "definition": {
+                    "type": "string"
+                },
+                "template": {
+                    "type": "string"
+                },
+                "ignoreCache": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "render": {
+            "type": "object",
+            "required": [
+                "src"
+            ],
+            "properties": {
+                "cache": {
+                    "type": "object",
+                    "required": [
+                        "ttl"
+                    ],
+                    "properties": {
+                        "ttl": {
+                            "type": "integer",
+                            "default": 3600
+                        }
+                    }
+                },
+                "src": {
+                    "type": "string"
+                }
+            }
+        },
+        "author": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "default": []
+        },
+        "shared": {
+            "type": "boolean",
+            "default": false
+        }
+    },
+    "additionalProperties": false,
+    "examples": [{
+        "title": "The repository stars history panel",
+        "name": "repository-stars-history-panel",
+        "type": "panel",
+        "topic": [
+            "repository"
+        ],
+        "description": "A panel for displaying historical trend graphs of open source repository stars.",
+        "query": {
+            "definition": "./query.json",
+            "template": "./template.sql",
+            "ignoreCache": true
+        },
+        "render": {
+            "cache": {
+                "ttl": 3600
+            },
+            "src": "./render.js"
+        },
+        "author": [
+            "Mini256"
+        ],
+        "shared": true
+    }]
+}

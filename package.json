@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "gen:schema-types": "json2ts ./schema/query.schema.json ./types/query.schema.d.ts && json2ts ./schema/panel.schema.json ./types/panel.schema.d.ts && json2ts ./schema/plugin.schema.json ./types/plugin.schema.d.ts",
+    "validate:query-schema": "ajv -s ./schema/query.schema.json -c ajv-formats -d ./configs/*query.json -r ./schema/openapi-2021-09-28.schema.json --strict=false",
+    "validate:panel-schema": "ajv -s ./schema/panel.schema.json -c ajv-formats -d ./configs/*panel.json",
+    "validate:plugin-schema": "ajv -s ./schema/plugin.schema.json -c ajv-formats -d \"./configs/*plugin.json\""
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -23,8 +27,11 @@
     "@types/node": "18.11.2",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
+    "ajv-cli": "^5.0.0",
+    "ajv-formats": "^2.1.1",
     "eslint": "8.25.0",
     "eslint-config-next": "12.3.1",
+    "json-schema-to-typescript": "^11.0.2",
     "typescript": "4.8.4"
   }
 }

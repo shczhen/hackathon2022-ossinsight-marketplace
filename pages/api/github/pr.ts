@@ -23,12 +23,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-  const session = await unstable_getServerSession(req, res, authOptions);
-  if (!session) {
-    res.status(401).end();
-    return;
-  }
-  const { login } = await getUserDetails(session.accessToken);
+  // const session = await unstable_getServerSession(req, res, authOptions);
+  // if (!session) {
+  //   res.status(401).end();
+  //   return;
+  // }
+  // const { login } = await getUserDetails(session.accessToken);
+  const login = 'test';
   const { sql, js, option } = req?.body || {};
 
   const options: Partial<SimpleGitOptions> = {

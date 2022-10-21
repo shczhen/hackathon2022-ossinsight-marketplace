@@ -13,18 +13,25 @@ const PLACEHOLDER = `/**
 * @param data Result of your SQL query.
 * @param result Default {}. You can set this value to pass to the next step.
 */
-function main(data, result) {
+function main(data) {
  // Example:
+ // const result = {};
  // const dataLength = data.length;
  // result.length = dataLength;
  // return result;
 };`;
 
-export default function JSTab(props: any) {
-  const [value, setValue] = React.useState('');
+export interface JSTabProps {
+  onChange?: (code: string) => void;
+}
+
+export default function JSTab(props: JSTabProps) {
+  const [editorValue, setEditorValue] = React.useState('');
 
   const handleEditorValueChange = (value: string | undefined) => {
     // console.log(value);
+    // setEditorValue(value || '');
+    props?.onChange && props.onChange(value || '');
   };
 
   return (

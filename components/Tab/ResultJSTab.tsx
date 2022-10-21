@@ -43,11 +43,15 @@ const MOCK_JS_RESULT_JSON = {
   ],
 };
 
-export default function ResultJSTab(props: any) {
+export interface ResultJSTabProps {
+  data?: any;
+}
+
+export default function ResultJSTab(props: ResultJSTabProps) {
   return (
     <Box>
       {/* <Typography> finish in xx.x s</Typography> */}
-      <BrowserOnlyReactJson src={MOCK_JS_RESULT_JSON} />
+      <BrowserOnlyReactJson src={props?.data || MOCK_JS_RESULT_JSON} />
     </Box>
   );
 }

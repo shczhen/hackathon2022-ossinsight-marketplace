@@ -12,6 +12,47 @@ import ResultSQLTab from 'components/Tab/ResultSQLTab';
 import ResultJSTab from 'components/Tab/ResultJSTab';
 import ResultEchartsTab from 'components/Tab/ResultEchartsTab';
 
+import axios from 'lib/axios';
+
+// ! TOREMOVE
+const MOCK_SQL_RESULT_JSON = {
+  data: [
+    {
+      id: 3121955081,
+      type: 'PushEvent',
+      created_at: '2015-09-06T04:14:43.000Z',
+      repo_id: 41986369,
+      repo_name: 'pingcap/tidb',
+      actor_id: 878009,
+      actor_login: 'ngaut',
+      language: '',
+      additions: 0,
+      deletions: 0,
+      action: '',
+      number: 0,
+      commit_id: '',
+      comment_id: 0,
+      org_login: 'pingcap',
+      org_id: 11855343,
+      state: '',
+      closed_at: '1970-01-01T00:00:00.000Z',
+      comments: 0,
+      pr_merged_at: '1970-01-01T00:00:00.000Z',
+      pr_merged: 0,
+      pr_changed_files: 0,
+      pr_review_comments: 0,
+      pr_or_issue_id: 0,
+      event_day: '2015-09-06T00:00:00.000Z',
+      event_month: '2015-09-01T00:00:00.000Z',
+      event_year: 2015,
+      push_size: 2,
+      push_distinct_size: 1,
+      creator_user_login: '',
+      creator_user_id: 0,
+      pr_or_issue_created_at: '1970-01-01T00:00:00.000Z',
+    },
+  ],
+};
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -49,6 +90,12 @@ export default function NewRequestSection() {
   const [value, setValue] = React.useState(0);
   const [resultTabValue, setResultTabValue] = React.useState(0);
 
+  const [sqlValue, setSqlValue] = React.useState('');
+  // const [sqlResult, setSqlResult] = React.useState<any>(null);
+  const [sqlResult, setSqlResult] = React.useState<any>(MOCK_SQL_RESULT_JSON);
+  const [jsCodeValue, setJsCodeValue] = React.useState('');
+  const [jsCodeResult, setJsCodeResult] = React.useState<any>(null);
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -58,6 +105,24 @@ export default function NewRequestSection() {
     newValue: number
   ) => {
     setResultTabValue(newValue);
+  };
+
+  const handleJSCodeChange = (code: string) => {
+    setJsCodeValue(code);
+  };
+
+  const handleSubmitJSCode = async () => {
+    try {
+      const data = await axios
+        .post('/api/vm/js', {
+          scripts: jsCodeValue,
+          data: sqlResult,
+        })
+        .then((res) => res.data);
+      setJsCodeResult(data.result);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -87,6 +152,8 @@ export default function NewRequestSection() {
           </Button>
           <Button
             variant="contained"
+            disabled={jsCodeValue === ''}
+            onClick={handleSubmitJSCode}
             sx={{
               display: value === 1 ? 'inline-flex' : 'none',
             }}
@@ -113,7 +180,7 @@ export default function NewRequestSection() {
         <SQLTab />
       </Box>
       <Box display={value === 1 ? 'block' : 'none'}>
-        <JSTab />
+        <JSTab onChange={handleJSCodeChange} />
       </Box>
       <Box display={value === 2 ? 'block' : 'none'}>
         <EChartsTab />
@@ -140,7 +207,7 @@ export default function NewRequestSection() {
           <ResultSQLTab />
         </Box>
         <Box display={resultTabValue === 1 ? 'block' : 'none'}>
-          <ResultJSTab />
+          <ResultJSTab data={jsCodeResult} />
         </Box>
         <Box display={resultTabValue === 2 ? 'block' : 'none'}>
           <ResultEchartsTab />

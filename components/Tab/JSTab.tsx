@@ -30,7 +30,7 @@ export default function JSTab(props: any) {
   return (
     <Box
       sx={{
-        height: 500,
+        height: 200,
       }}
     >
       <Editor

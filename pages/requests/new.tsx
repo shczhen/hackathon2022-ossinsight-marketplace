@@ -9,7 +9,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 
 import { Pages } from 'lib/constants';
 import Layout from 'components/Layout';
-import NewRequestStepper from 'components/Section/NewRequest';
+import NewRequest from 'components/Section/NewRequest';
 
 const NewRequestPage: NextPage = () => {
   return (
@@ -30,7 +30,7 @@ const NewRequestPage: NextPage = () => {
             <Typography color="text.primary">Create New Request</Typography>
           </Breadcrumbs>
 
-          <NewRequestStepper />
+          <NewRequest />
         </Box>
       </Container>
     </Layout>

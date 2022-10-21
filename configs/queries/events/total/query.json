@@ -1,10 +1,9 @@
 {
   "title": "Event total",
-  "name": "event-total",
+  "name": "events-total",
   "description": "The total number of events.",
   "public": true,
   "cache": {
-    "key": "events-total",
     "ttl": -1,
     "provider": "NORMAL_TABLE",
     "onlyFromCache": true

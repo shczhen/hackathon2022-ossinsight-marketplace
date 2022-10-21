@@ -9,9 +9,11 @@ const axios = Axios.create({
 });
 
 export function getUserDetails(accessToken: string) {
-  return axios.get('https://api.github.com/user', {
-    headers: {
-      Authorization: `token ${accessToken}`,
-    },
-  });
+  return axios
+    .get('https://api.github.com/user', {
+      headers: {
+        Authorization: `token ${accessToken}`,
+      },
+    })
+    .then((res) => res.data);
 }

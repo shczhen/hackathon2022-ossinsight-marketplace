@@ -9,6 +9,7 @@ import {
   CleanOptions,
   SimpleGitOptions,
 } from 'simple-git';
+import { writeFileSync, mkdirSync } from 'fs';
 
 import { getUserDetails } from 'lib/github';
 
@@ -22,12 +23,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-  // const session = await unstable_getServerSession(req, res, authOptions);
-  // if (!session) {
-  //   res.status(401).end();
-  //   return;
-  // }
-  // const { login } = await getUserDetails(session.accessToken);
+  const session = await unstable_getServerSession(req, res, authOptions);
+  if (!session) {
+    res.status(401).end();
+    return;
+  }
+  const { login } = await getUserDetails(session.accessToken);
+  const { sql, js, option } = req?.body || {};
 
   const options: Partial<SimpleGitOptions> = {
     baseDir: process.cwd(),
@@ -39,35 +41,36 @@ export default async function handler(
   const git: SimpleGit = simpleGit(options).clean(CleanOptions.FORCE);
 
   await git.clone(
-    `https://${process.env.GITHUB_BOT_TOKEN}@github.com/czhen-bot/hackathon2022-ossinsight-marketplace.git`
+    `https://.:${process.env.GITHUB_BOT_TOKEN}@github.com/czhen-bot/hackathon2022-ossinsight-marketplace.git`
   );
-  await git.pull();
-  await git.checkout(`-b${new Date().getTime()}`);
-  await git.push([' -u', 'origin', 'HEAD']);
+  const git2: SimpleGit = simpleGit(
+    `${process.cwd()}/hackathon2022-ossinsight-marketplace`,
+    {
+      binary: 'git',
+    }
+  );
 
-  res.status(200).json({});
+  const branchName = `login-${new Date().getTime()}`;
 
-  // const { scripts, data } = req?.body || {};
+  await git2.addConfig('user.name', 'github-actions');
+  await git2.addConfig('user.email', 'github-actions@github.com');
+  await git2.pull();
+  await git2.checkout(`-b${branchName}`);
 
-  // const context = { data: data, result: null };
-  // vm.createContext(context); // Contextify the object.
+  mkdirSync(
+    `${process.cwd()}/hackathon2022-ossinsight-marketplace/plugin-test/${branchName}`,
+    { recursive: true }
+  );
+  writeFileSync(
+    `${process.cwd()}/hackathon2022-ossinsight-marketplace/plugin-test/${branchName}/query.sql`,
+    sql
+  );
 
-  // // Code Example:
-  // // function main(data) {
-  // // const dataLength = data.length;
-  // // result.length = dataLength;
-  // // return result;
-  // // };
-  // const code = `${scripts} result = option;`;
+  await git2.add(
+    `${process.cwd()}/hackathon2022-ossinsight-marketplace/plugin-test/${branchName}`
+  );
+  await git2.commit('add plugin');
+  await git2.push(['-u', 'origin', branchName]);
 
-  // // console.log(context);
-
-  // try {
-  //   vm.runInContext(code, context);
-  // } catch (error: any) {
-  //   console.log(error);
-  //   res.status(500).json({ error: error.message });
-  //   return;
-  // }
-  // res.status(200).json({ ...context });
+  res.status(200).json({ id: branchName });
 }

@@ -1,6 +1,9 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
+import { SWRConfig } from 'swr';
+
+import { logger } from 'lib/swr';
 
 type newAppProps = AppProps & {
   pageProps: {
@@ -12,7 +15,9 @@ type newAppProps = AppProps & {
 function MyApp({ Component, pageProps }: newAppProps) {
   return (
     <SessionProvider session={pageProps.session}>
-      <Component {...pageProps} />
+      <SWRConfig value={{ use: [logger] }}>
+        <Component {...pageProps} />
+      </SWRConfig>
     </SessionProvider>
   );
 }

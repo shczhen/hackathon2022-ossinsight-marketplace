@@ -13,7 +13,7 @@ export interface Query {
   /**
    * Query name, default is generated base on the file path.
    */
-  name?: string;
+  name: string;
   /**
    * Indicates if the query is public.
    */
@@ -31,7 +31,7 @@ export interface Query {
   /**
    * Query parameters.
    */
-  parameters?: Parameter[];
+  parameters: Parameter[];
   result?: Schema;
 }
 /**
@@ -54,7 +54,6 @@ export interface Cache {
    * Indicates if the query need prefetch in advance.
    */
   needsPrefetch?: boolean;
-  [k: string]: unknown;
 }
 /**
  * Indicates how to implement prefetching, no prefetching if not provide.
@@ -68,7 +67,6 @@ export interface Prefetch {
    * The queue that will be execute the prefetch jobs.
    */
   queue?: "MAIN" | "REALTIME" | "CONCURRENT";
-  [k: string]: unknown;
 }
 export interface Parameter {
   /**
@@ -92,7 +90,6 @@ export interface Parameter {
    * The placeholder of the parameter in the template SQL, it will be replaced
    */
   placeholder?: string;
-  [k: string]: unknown;
 }
 /**
  * The option definition of parameter.
@@ -109,22 +106,13 @@ export interface ParameterOption {
   /**
    * Get the options by enumerating the list.
    */
-  enums?:
-    | []
-    | [string]
-    | [
-        string,
-        {
-          [k: string]: unknown;
-        }
-      ];
+  enums?: string[];
   /**
    * Get parameter values through mapping.
    */
   mappings?: {
     [k: string]: unknown;
   };
-  [k: string]: unknown;
 }
 /**
  * Query result.

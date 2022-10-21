@@ -39,7 +39,8 @@
                 "ignoreCache": {
                     "type": "boolean"
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "render": {
             "type": "object",
@@ -57,12 +58,14 @@
                             "type": "integer",
                             "default": 3600
                         }
-                    }
+                    },
+                    "additionalProperties": false
                 },
                 "src": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "author": {
             "type": "array",

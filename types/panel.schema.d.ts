@@ -6,10 +6,10 @@
  */
 
 export interface Panel {
-  title?: string;
-  name?: string;
+  title: string;
+  name: string;
   description?: string;
-  plugin?: string;
+  plugin: string;
   options?: {
     [k: string]: unknown;
   };

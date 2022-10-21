@@ -6,24 +6,21 @@
  */
 
 export interface Plugin {
-  title?: string;
-  name?: string;
-  type?: string;
+  title: string;
+  name: string;
+  type: string;
   topic?: unknown[];
   description?: string;
   query?: {
-    definition?: string;
-    template?: string;
+    definition: string;
+    template: string;
     ignoreCache?: boolean;
-    [k: string]: unknown;
   };
   render?: {
     cache?: {
-      ttl?: number;
-      [k: string]: unknown;
+      ttl: number;
     };
-    src?: string;
-    [k: string]: unknown;
+    src: string;
   };
   author?: string[];
   shared?: boolean;

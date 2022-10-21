@@ -81,7 +81,8 @@
           "description": "Indicates if the query need prefetch in advance.",
           "default": false
         }
-      }
+      },
+      "additionalProperties": false
     },
     "Prefetch": {
       "type": "object",
@@ -99,7 +100,8 @@
           "enum": ["MAIN", "REALTIME", "CONCURRENT"],
           "default": "MAIN"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "Parameter": {
       "type": "object",
@@ -144,7 +146,8 @@
           "description": "The placeholder of the parameter in the template SQL, it will be replaced ",
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ParameterOption": {
       "type": "object",
@@ -168,7 +171,8 @@
           "type": "object",
           "description": "Get parameter values through mapping."
         }
-      }
+      },
+      "additionalProperties": false
     }
   }
 }

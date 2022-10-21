@@ -39,7 +39,8 @@ export default async function handler(
     trimmed: false,
   };
 
-  const git: SimpleGit = simpleGit(options).clean(CleanOptions.FORCE);
+  // const git: SimpleGit = simpleGit(options).clean(CleanOptions.FORCE);
+  const git: SimpleGit = simpleGit(options);
 
   await git.clone(
     `https://.:${process.env.GITHUB_BOT_TOKEN}@github.com/czhen-bot/hackathon2022-ossinsight-marketplace.git`
@@ -64,7 +65,7 @@ export default async function handler(
   );
   writeFileSync(
     `${process.cwd()}/hackathon2022-ossinsight-marketplace/plugin-test/${branchName}/query.sql`,
-    sql
+    sql || 'select * from ssss'
   );
 
   await git2.add(

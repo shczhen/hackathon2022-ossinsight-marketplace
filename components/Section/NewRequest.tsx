@@ -7,6 +7,7 @@ import Tab from '@mui/material/Tab';
 
 import SQLTab from 'components/Tab/SQLTab';
 import JSTab from 'components/Tab/JSTab';
+import EChartsTab from 'components/Tab/EChartsTab';
 import ResultSQLTab from 'components/Tab/ResultSQLTab';
 import ResultJSTab from 'components/Tab/ResultJSTab';
 import ResultEchartsTab from 'components/Tab/ResultEchartsTab';
@@ -61,7 +62,7 @@ export default function NewRequestSection() {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex' }}>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -69,7 +70,38 @@ export default function NewRequestSection() {
         >
           <Tab label="SQL" {...a11yProps(0)} />
           <Tab label="Scritps" {...a11yProps(1)} />
+          <Tab label="ECharts" {...a11yProps(2)} />
         </Tabs>
+        <Box
+          sx={{
+            marginLeft: 'auto',
+          }}
+        >
+          <Button
+            variant="contained"
+            sx={{
+              display: value === 0 ? 'inline-flex' : 'none',
+            }}
+          >
+            Run SQL
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              display: value === 1 ? 'inline-flex' : 'none',
+            }}
+          >
+            Run Scripts
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              display: value === 2 ? 'inline-flex' : 'none',
+            }}
+          >
+            Run Option
+          </Button>
+        </Box>
       </Box>
       {/* <TabPanel value={value} index={0}>
         <SQLTab />
@@ -82,6 +114,9 @@ export default function NewRequestSection() {
       </Box>
       <Box display={value === 1 ? 'block' : 'none'}>
         <JSTab />
+      </Box>
+      <Box display={value === 2 ? 'block' : 'none'}>
+        <EChartsTab />
       </Box>
 
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

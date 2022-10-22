@@ -34,14 +34,14 @@ const Home: NextPage = () => {
             <Button
               variant="contained"
               startIcon={<ReviewsIcon fontSize="inherit" />}
-              onClick={() => router.push(Pages.Requests)}
+              onClick={() => router.push(Pages.Panels)}
             >
-              View my requests
+              View my panels
             </Button>
             <Button
               variant="contained"
               startIcon={<LibraryAddIcon fontSize="inherit" />}
-              onClick={() => router.push(Pages.NewRequest)}
+              onClick={() => router.push(Pages.Newpanel)}
             >
               Create
             </Button>

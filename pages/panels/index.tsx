@@ -36,7 +36,7 @@ export default function RequestHomePage(props: { results: panelItem[] }) {
             }}
           >
             <Link href={Pages.Home}>Home</Link>
-            <Typography color="text.primary">Requests</Typography>
+            <Typography color="text.primary">My Panels</Typography>
           </Breadcrumbs>
 
           {results.map((panel) => {

@@ -1,0 +1,64 @@
+name: Create New Panel PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      panelName:
+        description: 'The name of panel.'
+        required: true
+        type: string
+      panel:
+        description: 'The config of panel.'
+        required: true
+        type: string
+      query:
+        description: 'The config of query.'
+        required: true
+        type: string
+      script:
+        description: 'The render script written by JavaScript.'
+        required: true
+        type: string
+      sql:
+        description: 'The template sql of query.'
+        required: true
+        type: string
+
+jobs:
+  create-new-panel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: 'czhen-bot/hackathon2022-ossinsight-marketplace'
+          ref: 'main'
+          token: ${{ secrets.CZHEN_BOT_GH_TOKEN }}
+          path: 'bot_repo'
+      - name: Create a New Branch and Commit
+        run: |
+          cd bot_repo
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          git checkout -b new-panel-${{ inputs.panelName }}
+
+          sudo mkdir -p 
+          sudo chmod -R 777 panels/${{ inputs.panelName }}
+          sudo echo "${{ inputs.panel }}" > panels/${{ inputs.panelName }}/panel.json
+          sudo echo "${{ inputs.script }}" > panels/${{ inputs.panelName }}/render.js
+          sudo echo "${{ inputs.query }}" > panels/${{ inputs.panelName }}/query.json
+          sudo echo "${{ inputs.sql }}" > panels/${{ inputs.panelName }}/query.sql
+          ls -l panels/${{ inputs.panelName }}
+
+          git add panels/${{ inputs.panelName }}
+          git commit -m "config: add new panel ${{ inputs.panelName }}"
+          git push -u origin ${{ inputs.panelName }}
+
+      - name: Create Pull Request
+        run: |
+          curl \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.CZHEN_BOT_GH_TOKEN }}" \
+          https://api.github.com/repos/shczhen/hackathon2022-ossinsight-marketplace/pulls \
+          -d '{"title":"[plugin] ${{ inputs.panelName }}","body":"Please pull these awesome changes in!","head":"czhen-bot:hackathon2022-ossinsight-marketplace:${{ inputs.panelName }}","base":"main"}'

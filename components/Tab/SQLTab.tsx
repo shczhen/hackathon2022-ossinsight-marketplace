@@ -7,7 +7,7 @@ import Editor from '@monaco-editor/react';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReactJson, { ReactJsonViewProps } from 'react-json-view';
 
-const PLACEHOLDER = `SELECT
+export const PLACEHOLDER_SQL = `SELECT
 actor_login,
 COUNT(*) AS comments
 FROM
@@ -147,7 +147,7 @@ export default function SQLStep(props: { onChange?: (value: string) => void }) {
         height="100%"
         theme="vs-dark"
         defaultLanguage="mysql"
-        defaultValue={PLACEHOLDER}
+        defaultValue={PLACEHOLDER_SQL}
         onChange={handleEditorValueChange}
       />
     </Box>

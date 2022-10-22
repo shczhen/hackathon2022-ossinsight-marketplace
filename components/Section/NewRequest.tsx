@@ -7,8 +7,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { VariantType, useSnackbar } from 'notistack';
 
-import SQLTab from 'components/Tab/SQLTab';
-import JSTab from 'components/Tab/JSTab';
+import SQLTab, { PLACEHOLDER_SQL } from 'components/Tab/SQLTab';
+import JSTab, { PLACEHOLDER_JS } from 'components/Tab/JSTab';
 import ResultSQLTab from 'components/Tab/ResultSQLTab';
 import ResultJSTab from 'components/Tab/ResultJSTab';
 import ResultEchartsTab from 'components/Tab/ResultEchartsTab';
@@ -53,13 +53,11 @@ export default function NewRequestSection() {
   const [value, setValue] = React.useState(0);
   const [resultTabValue, setResultTabValue] = React.useState(0);
 
-  const [sqlValue, setSqlValue] = React.useState('');
+  const [sqlValue, setSqlValue] = React.useState(PLACEHOLDER_SQL);
   const [sqlLoading, setSqlLoading] = React.useState(false);
   const [sqlResult, setSqlResult] = React.useState<QueryResult | null>(null);
-  const [jsCodeValue, setJsCodeValue] = React.useState('');
+  const [jsCodeValue, setJsCodeValue] = React.useState(PLACEHOLDER_JS);
   const [jsCodeResult, setJsCodeResult] = React.useState<any>(null);
-  const [echartValue, setEchartValue] = React.useState('');
-  const [echartResult, setEchartResult] = React.useState<any>(null);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -80,8 +78,6 @@ export default function NewRequestSection() {
         setSqlValue(code);
       } else if (type === 'js') {
         setJsCodeValue(code);
-      } else if (type === 'echart') {
-        setEchartValue(code);
       }
     };
 
@@ -132,7 +128,6 @@ export default function NewRequestSection() {
           sql: sqlValue,
         })
         .then((res) => res.data);
-      setEchartResult(data.result);
     } catch (error: any) {
       enqueueSnackbar(`${error?.response?.data?.error || error.message}`, {
         variant: 'error',
@@ -159,6 +154,7 @@ export default function NewRequestSection() {
         >
           <LoadingButton
             variant="contained"
+            disabled={sqlValue === ''}
             onClick={handleSubmitSQL}
             loading={sqlLoading}
             sx={{

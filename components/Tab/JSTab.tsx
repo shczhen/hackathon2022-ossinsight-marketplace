@@ -7,12 +7,11 @@ import Editor from '@monaco-editor/react';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReactJson, { ReactJsonViewProps } from 'react-json-view';
 
-const PLACEHOLDER = `/**
+export const PLACEHOLDER_JS = `/**
 * Implement the main function here.
 * We will pass the result of your SQL query to the this function.
 * You should not use any variables starting with '__' in this function. (such as '__result__')
 * @param data Result of your SQL query.
-* @param option ECharts option.
 */
 function main(data) { 
  // Do remember to return the echart option here.
@@ -57,7 +56,7 @@ export default function JSTab(props: JSTabProps) {
         height="100%"
         theme="vs-dark"
         defaultLanguage="javascript"
-        defaultValue={PLACEHOLDER}
+        defaultValue={PLACEHOLDER_JS}
         onChange={handleEditorValueChange}
       />
     </Box>

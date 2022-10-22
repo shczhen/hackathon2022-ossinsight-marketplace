@@ -6,11 +6,11 @@
   "cache": {
     "ttl": -1,
     "provider": "NORMAL_TABLE",
-    "onlyFromCache": true
+    "needsPrefetch": true
   },
   "prefetch": {
     "cron": "0 * * * * *",
     "queue": "REALTIME"
   },
-  "params": []
+  "parameters": []
 }

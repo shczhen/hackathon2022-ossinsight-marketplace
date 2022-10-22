@@ -9,7 +9,6 @@ import { VariantType, useSnackbar } from 'notistack';
 
 import SQLTab from 'components/Tab/SQLTab';
 import JSTab from 'components/Tab/JSTab';
-import EChartsTab from 'components/Tab/EChartsTab';
 import ResultSQLTab from 'components/Tab/ResultSQLTab';
 import ResultJSTab from 'components/Tab/ResultJSTab';
 import ResultEchartsTab from 'components/Tab/ResultEchartsTab';
@@ -111,30 +110,12 @@ export default function NewRequestSection() {
       const data = await axios
         .post('/api/vm/js', {
           scripts: jsCodeValue,
-          data: sqlResult,
+          data: sqlResult?.data,
         })
         .then((res) => res.data);
-      setJsCodeResult(data.result);
+      setJsCodeResult(data.__result__);
     } catch (error: any) {
       setJsCodeResult(null);
-      enqueueSnackbar(`${error?.response?.data?.error || error.message}`, {
-        variant: 'error',
-      });
-      console.error(error);
-    }
-  };
-
-  const handleSubmitEchartCode = async () => {
-    try {
-      const data = await axios
-        .post('/api/vm/echarts', {
-          scripts: echartValue,
-          data: jsCodeResult,
-        })
-        .then((res) => res.data);
-      setEchartResult(data.result);
-    } catch (error: any) {
-      setEchartResult(null);
       enqueueSnackbar(`${error?.response?.data?.error || error.message}`, {
         variant: 'error',
       });
@@ -146,7 +127,7 @@ export default function NewRequestSection() {
     try {
       const data = await axios
         .post('/api/github/pr', {
-          options: echartValue,
+          options: jsCodeResult,
           js: jsCodeValue,
           sql: sqlValue,
         })
@@ -170,7 +151,6 @@ export default function NewRequestSection() {
         >
           <Tab label="SQL" {...a11yProps(0)} />
           <Tab label="JS Scritps" {...a11yProps(1)} />
-          <Tab label="Options" {...a11yProps(2)} />
         </Tabs>
         <Box
           sx={{
@@ -197,32 +177,13 @@ export default function NewRequestSection() {
           >
             Run Scripts
           </Button>
-          <Button
-            variant="contained"
-            disabled={echartValue === ''}
-            onClick={handleSubmitEchartCode}
-            sx={{
-              display: value === 2 ? 'inline-flex' : 'none',
-            }}
-          >
-            Run Option
-          </Button>
         </Box>
       </Box>
-      {/* <TabPanel value={value} index={0}>
-        <SQLTab />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <JSTab />
-      </TabPanel> */}
       <Box display={value === 0 ? 'block' : 'none'}>
         <SQLTab onChange={handleEditorInputChange('sql')} />
       </Box>
       <Box display={value === 1 ? 'block' : 'none'}>
         <JSTab onChange={handleEditorInputChange('js')} />
-      </Box>
-      <Box display={value === 2 ? 'block' : 'none'}>
-        <EChartsTab onChange={handleEditorInputChange('echart')} />
       </Box>
 
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -249,7 +210,7 @@ export default function NewRequestSection() {
           <ResultJSTab data={jsCodeResult} />
         </Box>
         <Box display={resultTabValue === 2 ? 'block' : 'none'}>
-          <ResultEchartsTab data={echartResult} />
+          <ResultEchartsTab data={jsCodeResult} />
         </Box>
       </Box>
       <Box
@@ -260,8 +221,11 @@ export default function NewRequestSection() {
       >
         <Button
           variant="contained"
-          disabled={!(sqlValue && jsCodeValue && echartValue)}
+          disabled={!(sqlValue && jsCodeValue && jsCodeResult)}
           onClick={handleSubmitReview}
+          sx={{
+            margin: '2rem 0',
+          }}
         >
           Submit
         </Button>

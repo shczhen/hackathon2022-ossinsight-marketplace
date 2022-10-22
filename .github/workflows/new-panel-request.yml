@@ -52,7 +52,7 @@ jobs:
 
           git add panels/${{ inputs.panelName }}
           git commit -m "config: add new panel ${{ inputs.panelName }}"
-          git push -u origin ${{ inputs.panelName }}
+          git push -u origin new-panel-${{ inputs.panelName }}
 
       - name: Create Pull Request
         run: |

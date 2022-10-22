@@ -7,28 +7,31 @@ import Editor from '@monaco-editor/react';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReactJson, { ReactJsonViewProps } from 'react-json-view';
 
-const PLACEHOLDER = `/**
-* Implement a function here.
-* We will pass the result of your SQL query to the this function.
-* @param data Result of your SQL query.
-* @param result Default {}. You can set this value to pass to the next step.
-*/
-function main(data) {
- // Example:
- const result = data;
- return result;
+const PLACEHOLDER = `const option = {
+  xAxis: {
+    type: 'category',
+    data: data.map(i => i.actor_login)
+  },
+  yAxis: {
+    type: 'value'
+  },
+  series: [
+    {
+      data: data.map(i => i.comments),
+      type: 'bar'
+    }
+  ]
 };`;
 
-export interface JSTabProps {
+export interface EChartsTabProps {
   onChange?: (code: string) => void;
 }
 
-export default function JSTab(props: JSTabProps) {
-  const [editorValue, setEditorValue] = React.useState('');
+export default function EChartsTab(props: EChartsTabProps) {
+  const [value, setValue] = React.useState('');
 
   const handleEditorValueChange = (value: string | undefined) => {
     // console.log(value);
-    // setEditorValue(value || '');
     props?.onChange && props.onChange(value || '');
   };
 

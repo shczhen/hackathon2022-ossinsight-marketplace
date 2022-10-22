@@ -7,25 +7,25 @@ import Editor from '@monaco-editor/react';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReactJson, { ReactJsonViewProps } from 'react-json-view';
 
-const PLACEHOLDER = `/*
-Playground uses LIMITED resource(cpu/mem), so SQL should add:
-
-  WHERE repo_id = 41986369
-
-to use index as much as possible, or it will be terminated.
-
-
-Example:
-
-SELECT
-  *
+const PLACEHOLDER = `SELECT
+actor_login,
+COUNT(*) AS comments
 FROM
-  github_events
+github_events
 WHERE
-  repo_id = {{{repoId}}
+repo_id = 41986369
+AND actor_login NOT LIKE '%bot%'
+AND type IN (
+  'IssueCommentEvent',
+  'PullRequestReviewCommentEvent'
+)
+GROUP BY
+actor_login
+ORDER BY
+comments DESC
 LIMIT
-  1;
-*/`;
+5
+;`;
 
 const MOCK_SQL_RESULT_JSON = {
   data: [

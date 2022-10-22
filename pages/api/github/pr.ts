@@ -23,7 +23,7 @@ export default async function handler(
   }
   const { login } = await getUserDetails(session.accessToken);
 
-  if (!['shczhen', 'shczhen-bot'].includes(login)) {
+  if (!['shczhen', 'shczhen-bot', 'Mini256', 'Icemap'].includes(login)) {
     res.status(401).end();
     return;
   }

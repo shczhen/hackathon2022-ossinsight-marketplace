@@ -1,0 +1,1 @@
+{title:Developer Events Panel,name:developer-events-panel,topic:[],description:A panel for displaying the number of events of each type for a developer.,query:{definition:./query.json,template:./template.sql,ignoreCache:true},render:{cache:{ttl:3600},src:./render.js},author:[],shared:true}

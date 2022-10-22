@@ -1,0 +1,1 @@
+const option = {   xAxis: {     type: 'category',     data: data.map(i => i.actor_login)   },   yAxis: {     type: 'value'   },   series: [     {       data: data.map(i => i.comments),       type: 'bar'     }   ] };

@@ -5,10 +5,10 @@
   "cache": {
     "ttl": 3600
   },
-  "params": [
+  "parameters": [
     {
       "name": "repoId",
-      "replaces": "41986369",
+      "placeholder": "41986369",
       "type": "array",
       "validate": [
         {

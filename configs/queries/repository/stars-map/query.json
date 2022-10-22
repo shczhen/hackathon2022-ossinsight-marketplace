@@ -1,6 +1,6 @@
 {
   "name": "Repository Stars Map",
-  "description": "暂时",
+  "description": "Analyze the geographical location of the people who give the repository stars.",
   "cache": {
     "key": "repos-stars-map",
     "ttl": 3600

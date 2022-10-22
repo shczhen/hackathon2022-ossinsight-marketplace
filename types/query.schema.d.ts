@@ -26,6 +26,14 @@ export interface Query {
    * Query description for documentation.
    */
   description?: string;
+  /**
+   * The SQL template of the query.
+   */
+  sql?: string;
+  /**
+   * The path used for API routing, which by default uses the relative path of the config file in the project as the URL path.
+   */
+  path?: string;
   cache?: Cache;
   prefetch?: Prefetch;
   /**

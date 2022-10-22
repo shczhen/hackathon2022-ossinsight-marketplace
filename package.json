@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:api-server": "ts-node --project tsconfig.json cmd/api-server/index.ts",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -23,15 +24,21 @@
     "axios": "^1.1.3",
     "echarts": "^5.4.0",
     "echarts-for-react": "^3.0.2",
+    "luxon": "^3.0.4",
     "next": "12.3.1",
     "next-auth": "^4.14.0",
+    "node-sql-parser": "^4.5.1",
     "notistack": "^2.0.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-json-view": "^1.21.3",
-    "swr": "^1.3.0"
+    "serverless-mysql": "^1.5.4",
+    "swr": "^1.3.0",
+    "winston": "^3.8.2"
   },
   "devDependencies": {
+    "@types/luxon": "^3.0.2",
+    "@types/mysql": "^2.15.21",
     "@types/node": "18.11.2",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
@@ -40,6 +47,7 @@
     "eslint": "8.25.0",
     "eslint-config-next": "12.3.1",
     "json-schema-to-typescript": "^11.0.2",
+    "ts-node": "^10.9.1",
     "typescript": "4.8.4"
   }
 }

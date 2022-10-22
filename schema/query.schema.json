@@ -29,6 +29,14 @@
       "description": "Query description for documentation.",
       "type": "string"
     },
+    "sql": {
+      "type": "string",
+      "description": "The SQL template of the query."
+    },
+    "path": {
+      "type": "string",
+      "description": "The path used for API routing, which by default uses the relative path of the config file in the project as the URL path."
+    },
     "cache": {
       "type": "object",
       "description": "Indicates how to implement caching, no caching if not provide.",

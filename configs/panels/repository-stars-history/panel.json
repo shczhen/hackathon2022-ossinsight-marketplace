@@ -1,7 +1,6 @@
 {
     "title": "The repository stars history panel",
     "name": "repository-stars-history-panel",
-    "type": "panel",
     "topic": [
         "repository"
     ],

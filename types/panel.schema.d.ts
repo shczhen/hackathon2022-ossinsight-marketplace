@@ -8,9 +8,19 @@
 export interface Panel {
   title: string;
   name: string;
+  topic?: unknown[];
   description?: string;
-  plugin: string;
-  options?: {
-    [k: string]: unknown;
+  query?: {
+    definition: string;
+    template: string;
+    ignoreCache?: boolean;
   };
+  render?: {
+    cache?: {
+      ttl: number;
+    };
+    src: string;
+  };
+  author?: string[];
+  shared?: boolean;
 }

@@ -1,7 +1,0 @@
-{
-    "title": "The repository stars history panel",
-    "name": "repository-stars-history-panel",
-    "description": "A panel for displaying historical trend graphs of open source repository stars.",
-    "plugin": "repository-stars-history",
-    "options": {}
-}

@@ -5,10 +5,11 @@
     "key": "repos-stars-map",
     "ttl": 3600
   },
-  "params": [
+  "parameters": [
     {
       "name": "repoId",
-      "replaces": "41986369",
+      "type": "number",
+      "placeholder": "41986369",
       "validate": [
         {
           "type": "REGEXP",
@@ -19,20 +20,6 @@
           "value": 10
         }
       ]
-    },
-    {
-      "name": "period",
-      "description": "",
-      "replaces": "AND ge.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 28 DAY) AND NOW()",
-      "enums": [
-        "past_28_days",
-        "all_times"
-      ],
-      "template": {
-        "past_28_days": "AND ge.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 28 DAY) AND NOW()",
-        "all_times": ""
-      },
-      "default": "all_times"
     }
   ]
 }

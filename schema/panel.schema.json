@@ -4,8 +4,7 @@
     "title": "Panel",
     "required": [
         "title",
-        "name",
-        "plugin"
+        "name"
     ],
     "properties": {
         "title": {
@@ -14,24 +13,90 @@
         "name": {
             "type": "string"
         },
-        "description": {
-            "type": "string",
-            "default": ""
+        "topic": {
+            "type": "array"
         },
-        "plugin": {
+        "description": {
             "type": "string"
         },
-        "options": {
+        "query": {
             "type": "object",
-            "default": {}
+            "required": [
+                "definition",
+                "template"
+            ],
+            "properties": {
+                "definition": {
+                    "type": "string"
+                },
+                "template": {
+                    "type": "string"
+                },
+                "ignoreCache": {
+                    "type": "boolean"
+                }
+            },
+            "additionalProperties": false
+        },
+        "render": {
+            "type": "object",
+            "required": [
+                "src"
+            ],
+            "properties": {
+                "cache": {
+                    "type": "object",
+                    "required": [
+                        "ttl"
+                    ],
+                    "properties": {
+                        "ttl": {
+                            "type": "integer",
+                            "default": 3600
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "src": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "author": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "default": []
+        },
+        "shared": {
+            "type": "boolean",
+            "default": false
         }
     },
     "additionalProperties": false,
     "examples": [{
         "title": "The repository stars history panel",
         "name": "repository-stars-history-panel",
+        "topic": [
+            "repository"
+        ],
         "description": "A panel for displaying historical trend graphs of open source repository stars.",
-        "plugin": "repository-stars-history",
-        "options": {}
+        "query": {
+            "definition": "./query.json",
+            "template": "./template.sql",
+            "ignoreCache": true
+        },
+        "render": {
+            "cache": {
+                "ttl": 3600
+            },
+            "src": "./render.js"
+        },
+        "author": [
+            "Mini256"
+        ],
+        "shared": true
     }]
 }

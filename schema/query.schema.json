@@ -54,7 +54,7 @@
         "$ref": "#/definitions/Parameter"
       }
     },
-    "result": {
+    "results": {
       "description": "Query result.",
       "$ref": "https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema"
     }
@@ -127,6 +127,13 @@
           "description": "The parameter type.",
           "type": "string",
           "enum": ["boolean", "number", "string", "array"]
+        },
+        "validate": {
+          "description": "The validate rule for parameter value.",
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         },
         "defaultValue": {
           "description": "The default value of parameter.",

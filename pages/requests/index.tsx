@@ -11,15 +11,15 @@ import Layout from 'components/Layout';
 import PluginCard from 'components/Card/PluginCard';
 import { Pages } from 'lib/constants';
 
-export interface pluginItem {
+export interface panelItem {
   name: string;
-  plugin: string;
+  panel: string;
   query: string;
   js: string;
   sql: string;
 }
 
-export default function RequestHomePage(props: { results: pluginItem[] }) {
+export default function RequestHomePage(props: { results: panelItem[] }) {
   const { results } = props;
 
   return (
@@ -39,21 +39,21 @@ export default function RequestHomePage(props: { results: pluginItem[] }) {
             <Typography color="text.primary">Requests</Typography>
           </Breadcrumbs>
 
-          {results.map((plugin) => {
-            const pluginData = JSON.parse(plugin.plugin);
+          {results.map((panel) => {
+            const panelData = JSON.parse(panel.panel);
             return (
               <Box
-                key={plugin.name}
+                key={panel.name}
                 sx={{
                   height: 400,
                   width: 300,
                 }}
               >
                 <PluginCard
-                  id={plugin.name}
-                  title={pluginData.title}
-                  desc={pluginData.description}
-                  author={pluginData.author}
+                  id={panel.name}
+                  title={panelData.title}
+                  desc={panelData.description}
+                  author={panelData.author}
                 />
               </Box>
             );
@@ -73,18 +73,18 @@ export async function getStaticProps() {
   // const res = await fetch('https://.../posts');
   // const posts = await res.json();
   const BASE_PATH = process.cwd();
-  const panels = readdirSync(join(BASE_PATH, 'configs/plugins/panels'));
+  const panels = readdirSync(join(BASE_PATH, 'configs/panels'));
   // console.log(panels);
-  const results: pluginItem[] = [];
+  const results: panelItem[] = [];
   panels.forEach((panel) => {
-    const panelPath = join(BASE_PATH, 'configs/plugins/panels', panel);
-    const pluginJsonStr = readFileSync(join(panelPath, 'plugin.json'));
+    const panelPath = join(BASE_PATH, 'configs/panels', panel);
+    const panelJsonStr = readFileSync(join(panelPath, 'panel.json'));
     const queryJsonStr = readFileSync(join(panelPath, 'query.json'));
     const renderJsBuf = readFileSync(join(panelPath, 'render.js'));
     const templateSqlBuf = readFileSync(join(panelPath, 'template.sql'));
     results.push({
       name: panel,
-      plugin: pluginJsonStr.toString(),
+      panel: panelJsonStr.toString(),
       query: queryJsonStr.toString(),
       js: renderJsBuf.toString(),
       sql: templateSqlBuf.toString(),

@@ -29,7 +29,3 @@ jobs:
       - name: Verify Panel Definition JSON
         run: |
           npm run validate:panel-schema
-
-      - name: Verify Plugin Definition JSON
-        run: |
-          npm run validate:plugin-schema

@@ -97,7 +97,7 @@ export default function NewRequestSection() {
       setSqlResult(data as QueryResult);
     } catch (error: any) {
       setSqlResult(null);
-      enqueueSnackbar(`${error?.response?.data?.error || error.message}`, {
+      enqueueSnackbar(`${error?.response?.data?.message || error.message}`, {
         variant: 'error',
       });
       console.error(error);

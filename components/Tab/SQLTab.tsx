@@ -129,11 +129,12 @@ const MOCK_SQL_RESULT_JSON = {
 //   );
 // }
 
-export default function SQLStep(props: any) {
+export default function SQLStep(props: { onChange?: (value: string) => void }) {
   const [sql, setSql] = React.useState('');
 
   const handleEditorValueChange = (value: string | undefined) => {
     // console.log(value);
+    props?.onChange && props.onChange(value || '');
   };
 
   return (

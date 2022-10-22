@@ -143,6 +143,24 @@ export default function NewRequestSection() {
     }
   };
 
+  const handleSubmitReview = async () => {
+    try {
+      const data = await axios
+        .post('/api/github/pr', {
+          options: echartValue,
+          js: jsCodeValue,
+          sql: sqlValue,
+        })
+        .then((res) => res.data);
+      setEchartResult(data.result);
+    } catch (error: any) {
+      enqueueSnackbar(`${error?.response?.data?.error || error.message}`, {
+        variant: 'error',
+      });
+      console.error(error);
+    }
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex' }}>
@@ -197,7 +215,7 @@ export default function NewRequestSection() {
         <JSTab />
       </TabPanel> */}
       <Box display={value === 0 ? 'block' : 'none'}>
-        <SQLTab />
+        <SQLTab onChange={handleEditorInputChange('sql')} />
       </Box>
       <Box display={value === 1 ? 'block' : 'none'}>
         <JSTab onChange={handleEditorInputChange('js')} />
@@ -232,6 +250,20 @@ export default function NewRequestSection() {
         <Box display={resultTabValue === 2 ? 'block' : 'none'}>
           <ResultEchartsTab data={echartResult} />
         </Box>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+        }}
+      >
+        <Button
+          variant="contained"
+          disabled={!(sqlValue && jsCodeValue && echartValue)}
+          onClick={handleSubmitReview}
+        >
+          Submit
+        </Button>
       </Box>
     </Box>
   );

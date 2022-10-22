@@ -6,77 +6,32 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import { pluginItem } from 'pages/requests';
 import Layout from 'components/Layout';
 import { Pages } from 'lib/constants';
 import Highlighter from 'components/Section/CodeSection';
+import RequestDetails from 'components/Section/RequestDetailsSection';
+import RequestShare from 'components/Section/RequestShare';
 
 export default function RequestDetailsPage(props: { data: pluginItem }) {
   const { data } = props;
-  const pluginData = JSON.parse(data.plugin);
-  const { title, description, author } = pluginData;
+  const panelData = JSON.parse(data.panel);
+  const queryData = JSON.parse(data.query);
+  const { title, description, author } = panelData;
+
+  const router = useRouter();
+  const { type } = router.query;
 
   return (
-    <Layout
-      title={`OssInsight Marketplace | Request Details`}
-      description={description}
-    >
-      <Container maxWidth="xl">
-        <Box paddingTop="2rem" paddingBottom="2rem">
-          <Breadcrumbs
-            aria-label="breadcrumb"
-            sx={{
-              paddingBottom: '2rem',
-            }}
-          >
-            <Link href={Pages.Home}>Home</Link>
-            <Link href={Pages.Requests}>Requests</Link>
-            <Typography color="text.primary">{title}</Typography>
-          </Breadcrumbs>
-
-          <Typography variant="h4" component="h2" gutterBottom>
-            Plugin Config
-          </Typography>
-          <Highlighter content={data.plugin} language={['json']} />
-
-          <Typography variant="h4" component="h2" gutterBottom>
-            Query Config
-          </Typography>
-          <Highlighter content={data.query} language={['json']} />
-
-          <Typography variant="h4" component="h2" gutterBottom>
-            SQL Template
-          </Typography>
-          <Highlighter content={data.sql} language={['sql']} />
-
-          <Typography variant="h4" component="h2" gutterBottom>
-            Scripts
-          </Typography>
-          <Highlighter content={data.js} language={['javascripts']} />
-
-          {/* {results.map((plugin) => {
-            const pluginData = JSON.parse(plugin.plugin);
-            return (
-              <Box
-                key={plugin.name}
-                sx={{
-                  height: 400,
-                  width: 300,
-                }}
-              >
-                <PluginCard
-                  id={plugin.name}
-                  title={pluginData.title}
-                  desc={pluginData.description}
-                  author={pluginData.author}
-                />
-              </Box>
-            );
-          })} */}
-        </Box>
-      </Container>
-    </Layout>
+    <>
+      {type === 'share' ? (
+        <RequestShare params={queryData.params} sql={data.sql} js={data.js} />
+      ) : (
+        <RequestDetails title={title} data={data} description={description} />
+      )}
+    </>
   );
 }
 

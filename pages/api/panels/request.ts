@@ -14,13 +14,13 @@ declare module 'next-auth' {
 }
 
 if (!process.env.GITHUB_TOKEN) {
-  throw new Error('Must provide GITHUB_TOKEN in the env variable.');  
+  throw new Error('Must provide GITHUB_TOKEN in the env variable.');
 }
 const octokit = getOctokit(process.env.GITHUB_TOKEN);
 const TRUSTED_USERS = ['shczhen', 'shczhen-bot', 'Mini256', 'Icemap'];
 const CONFIG_REPO = {
   owner: 'shczhen',
-  repo: 'hackathon2022-ossinsight-marketplace'
+  repo: 'hackathon2022-ossinsight-marketplace',
 };
 
 export interface NewPanelRequest {
@@ -42,7 +42,9 @@ export default async function handler(
 
   // TODO: limit who can make a new panel request.
   const userOctokit = getOctokit(session.accessToken);
-  const { data: { login } } = await userOctokit.rest.users.getAuthenticated();
+  const {
+    data: { login },
+  } = await userOctokit.rest.users.getAuthenticated();
   if (!TRUSTED_USERS.includes(login)) {
     res.status(401).end();
     return;
@@ -51,7 +53,7 @@ export default async function handler(
   try {
     createPanelRequest(req.body || {});
     res.status(200).end();
-  } catch(err) {
+  } catch (err) {
     winston.error(`Failed to create a new panel request: ${err}`);
     res.status(500).end();
   }
@@ -64,14 +66,14 @@ export class NewPanelRequestError extends APIError {
 }
 
 // Create a pull request to add new plugin.
-async function createPanelRequest(request:NewPanelRequest) {
+async function createPanelRequest(request: NewPanelRequest) {
   const { panel, query, script, sql } = request;
   const panelName = panel.name;
 
   if (!panelName) {
     throw new NewPanelRequestError('The panel name is required.');
   }
-  
+
   // TODO: validate the new panel request.
 
   // TODO: avoid duplicated new panel request workflow.
@@ -81,7 +83,7 @@ async function createPanelRequest(request:NewPanelRequest) {
     workflow_id: 'new-panel-request.yml',
     ref: 'main',
     inputs: {
-      panel_name: panel.name,
+      panelName: panel.name,
       panel: JSON.stringify(panel),
       query: JSON.stringify(query),
       script,

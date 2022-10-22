@@ -1,19 +1,20 @@
 function main(data) {
   // Do remember to return the echart option here.
-  const myOption = {
+  const option = {
     xAxis: {
       type: 'category',
-      data: data.map((i) => i.event_day),
+      data: data.map((i) => i.event_month)
     },
     yAxis: {
-      type: 'value',
+      type: 'value'
     },
     series: [
       {
         data: data.map((i) => i.total),
-        type: 'bar',
-      },
-    ],
+        type: 'line'
+      }
+    ]
   };
-  return myOption;
+
+  return option;
 }

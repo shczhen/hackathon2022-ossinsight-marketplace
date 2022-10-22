@@ -40,7 +40,7 @@ export interface Query {
    * Query parameters.
    */
   parameters: Parameter[];
-  result?: Schema;
+  results?: Schema;
 }
 /**
  * Indicates how to implement caching, no caching if not provide.
@@ -89,6 +89,12 @@ export interface Parameter {
    * The parameter type.
    */
   type: "boolean" | "number" | "string" | "array";
+  /**
+   * The validate rule for parameter value.
+   */
+  validate?: {
+    [k: string]: unknown;
+  }[];
   /**
    * The default value of parameter.
    */

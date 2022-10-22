@@ -6,7 +6,7 @@ import ReactEcharts from 'echarts-for-react';
 import Alert from '@mui/material/Alert';
 
 import axios from 'lib/axios';
-import { QueryResult } from 'pages/api/sql/execute';
+import { QueryResult } from 'packages/db/db';
 
 export type QueryParameterItemType = {
   name: string;

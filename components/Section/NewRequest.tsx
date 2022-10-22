@@ -15,7 +15,7 @@ import ResultEchartsTab from 'components/Tab/ResultEchartsTab';
 import SubmitPanelDialog from 'components/Dialog/SubmitPanelDialog';
 
 import axios from 'lib/axios';
-import { QueryResult } from 'pages/api/sql/execute';
+import { QueryResult } from 'packages/db/db';
 
 interface TabPanelProps {
   children?: React.ReactNode;

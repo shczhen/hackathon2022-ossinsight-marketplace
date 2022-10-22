@@ -1,46 +1,34 @@
-import Axios from 'axios';
+import { throttling } from '@octokit/plugin-throttling';
+import { Octokit } from 'octokit';
 
-const axios = Axios.create({
-  baseURL: 'https://api.github.com',
-  headers: {
-    Accept: 'application/vnd.github.v3+json',
-  },
-  timeout: 10000,
-});
+export const CustomOctokit = Octokit.plugin(throttling);
 
-export function getUserDetails(accessToken: string) {
-  return axios
-    .get('https://api.github.com/user', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+export function getOctokit(token: string) {
+  return new CustomOctokit({
+    auth: token,
+    throttle: {
+      onRateLimit: (retryAfter: number, options: any, octokit: Octokit) => {
+        octokit.log.warn(
+          `Request quota exhausted for request ${options.method} ${options.url}`
+        );
+  
+        if (options.request.retryCount <= 1) {
+          // only retries once
+          octokit.log.info(`Retrying after ${retryAfter} seconds!`);
+          return true;
+        }
       },
-    })
-    .then((res) => res.data);
-}
+      onSecondaryRateLimit: (retryAfter: number, options: any, octokit: Octokit) => {
+        octokit.log.warn(
+          `SecondaryRateLimit detected for request ${options.method} ${options.url}`
+        );
 
-export function createPr(
-  accessToken: string,
-  owner: string,
-  repo: string,
-  title: string,
-  body: string,
-  head: string,
-  base: string
-) {
-  return axios
-    .post(
-      `https://api.github.com/repos/${owner}/${repo}/pulls`,
-      {
-        title,
-        body,
-        head,
-        base,
+        if (options.request.retryCount <= 1) {
+          // only retries once
+          octokit.log.info(`Retrying after ${retryAfter} seconds!`);
+          return true;
+        }
       },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    )
-    .then((res) => res.data);
+    },
+  });
 }

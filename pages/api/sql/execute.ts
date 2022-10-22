@@ -103,6 +103,18 @@ export default async function handler(
   }
 }
 
+export class APIError extends Error {
+  constructor(readonly code: number, readonly  message: string) {
+      super(message);
+  }
+}
+
+export class SQLVerifyError extends APIError {
+  constructor(readonly  message: string, sql: string) {
+    super(400, message);
+  }
+}
+
 async function executeQuery(sql:string):Promise<QueryResult> {
   const totalStart = DateTime.now();
 
@@ -165,18 +177,6 @@ async function prepareLimitedSession(conn:ServerlessMysql, isAP: boolean) {
   limits.forEach(async (command) => {
     await conn.query(command);
   });
-}
-
-export class APIError extends Error {
-  constructor(readonly code: number, readonly  message: string) {
-      super(message);
-  }
-}
-
-export class SQLVerifyError extends APIError {
-  constructor(readonly  message: string, sql: string) {
-    super(400, message);
-  }
 }
 
 const TABLE_NAME = `[a-zA-Z][a-zA-Z0-9_]+`;

@@ -15,6 +15,9 @@ export interface Panel {
     template: string;
     ignoreCache?: boolean;
   };
+  cache?: {
+    [k: string]: unknown;
+  };
   render?: {
     cache?: {
       ttl: number;

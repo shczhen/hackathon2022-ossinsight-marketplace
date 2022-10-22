@@ -7,15 +7,15 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 
-import { pluginItem } from 'pages/requests';
+import { panelItem } from 'pages/requests';
 import Layout from 'components/Layout';
 import { Pages } from 'lib/constants';
 import Highlighter from 'components/Section/CodeSection';
 
-export default function RequestDetailsPage(props: { data: pluginItem }) {
+export default function RequestDetailsPage(props: { data: panelItem }) {
   const { data } = props;
-  const pluginData = JSON.parse(data.plugin);
-  const { title, description, author } = pluginData;
+  const panelData = JSON.parse(data.panel);
+  const { title, description, author } = panelData;
 
   return (
     <Layout
@@ -38,7 +38,7 @@ export default function RequestDetailsPage(props: { data: pluginItem }) {
           <Typography variant="h4" component="h2" gutterBottom>
             Plugin Config
           </Typography>
-          <Highlighter content={data.plugin} language={['json']} />
+          <Highlighter content={data.panel} language={['json']} />
 
           <Typography variant="h4" component="h2" gutterBottom>
             Query Config
@@ -56,7 +56,7 @@ export default function RequestDetailsPage(props: { data: pluginItem }) {
           <Highlighter content={data.js} language={['javascripts']} />
 
           {/* {results.map((plugin) => {
-            const pluginData = JSON.parse(plugin.plugin);
+            const panelData = JSON.parse(plugin.plugin);
             return (
               <Box
                 key={plugin.name}
@@ -67,9 +67,9 @@ export default function RequestDetailsPage(props: { data: pluginItem }) {
               >
                 <PluginCard
                   id={plugin.name}
-                  title={pluginData.title}
-                  desc={pluginData.description}
-                  author={pluginData.author}
+                  title={panelData.title}
+                  desc={panelData.description}
+                  author={panelData.author}
                 />
               </Box>
             );
@@ -84,7 +84,7 @@ export default function RequestDetailsPage(props: { data: pluginItem }) {
 export async function getStaticPaths() {
   // Query data and list all ids here!
   const BASE_PATH = process.cwd();
-  const panels = readdirSync(join(BASE_PATH, 'configs/plugins/panels'));
+  const panels = readdirSync(join(BASE_PATH, 'configs/panels'));
   const paths = panels.map((panel) => ({
     params: { id: panel },
   }));
@@ -98,20 +98,16 @@ export async function getStaticPaths() {
 export async function getStaticProps(context: { params: { id: string } }) {
   // Load ECharts options here!
   const BASE_PATH = process.cwd();
-  const panels = readdirSync(join(BASE_PATH, 'configs/plugins/panels'));
+  // const panels = readdirSync(join(BASE_PATH, 'configs/panels'));
   // console.log(panels);
-  const panelPath = join(
-    BASE_PATH,
-    'configs/plugins/panels',
-    context.params.id
-  );
-  const pluginJsonStr = readFileSync(join(panelPath, 'plugin.json'));
+  const panelPath = join(BASE_PATH, 'configs/panels', context.params.id);
+  const panelJsonStr = readFileSync(join(panelPath, 'panel.json'));
   const queryJsonStr = readFileSync(join(panelPath, 'query.json'));
   const renderJsBuf = readFileSync(join(panelPath, 'render.js'));
   const templateSqlBuf = readFileSync(join(panelPath, 'template.sql'));
   const results = {
     name: context.params.id,
-    plugin: pluginJsonStr.toString(),
+    panel: panelJsonStr.toString(),
     query: queryJsonStr.toString(),
     js: renderJsBuf.toString(),
     sql: templateSqlBuf.toString(),

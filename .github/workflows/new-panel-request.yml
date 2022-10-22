@@ -61,4 +61,4 @@ jobs:
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.CZHEN_BOT_GH_TOKEN }}" \
           https://api.github.com/repos/shczhen/hackathon2022-ossinsight-marketplace/pulls \
-          -d '{"title":"[plugin] ${{ inputs.panelName }}","body":"Please pull these awesome changes in!","head":"czhen-bot:hackathon2022-ossinsight-marketplace:${{ inputs.panelName }}","base":"main"}'
+          -d '{"title":"[panel] ${{ inputs.panelName }}","body":"Please pull these awesome changes in!","head":"czhen-bot:hackathon2022-ossinsight-marketplace:new-panel-${{ inputs.panelName }}","base":"main"}'

@@ -78,8 +78,6 @@ export default function NewRequestSection() {
         setSqlValue(code);
       } else if (type === 'js') {
         setJsCodeValue(code);
-      } else if (type === 'echart') {
-        setEchartValue(code);
       }
     };
 
@@ -130,7 +128,6 @@ export default function NewRequestSection() {
           sql: sqlValue,
         })
         .then((res) => res.data);
-      setEchartResult(data.result);
     } catch (error: any) {
       enqueueSnackbar(`${error?.response?.data?.error || error.message}`, {
         variant: 'error',

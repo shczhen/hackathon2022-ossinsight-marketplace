@@ -3,20 +3,23 @@ import { useRouter, NextRouter } from 'next/router';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import ReactEcharts from 'echarts-for-react';
+import Alert from '@mui/material/Alert';
 
 import axios from 'lib/axios';
 import { QueryResult } from 'pages/api/sql/execute';
 
-export interface RequestShareProps {
-  parameters: {
-    name: string;
-    placeholder: string;
+export type QueryParameterItemType = {
+  name: string;
+  placeholder: string;
+  type: string;
+  validate: {
     type: string;
-    validate: {
-      type: string;
-      pattern: string;
-    };
-  }[];
+    pattern: string;
+  };
+};
+
+export interface RequestShareProps {
+  parameters: QueryParameterItemType[];
   sql: string;
   js: string;
 }
@@ -28,6 +31,7 @@ export default function RequestShare(props: RequestShareProps) {
   const [sqlResult, setSqlResult] = React.useState<QueryResult | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [option, setOption] = React.useState<any>(null);
+  const [error, setError] = React.useState<any>(null);
 
   const router = useRouter();
 
@@ -48,10 +52,12 @@ export default function RequestShare(props: RequestShareProps) {
       } catch (error: any) {
         setSqlResult(null);
         console.error(error);
+        setError(error);
         setIsLoading(false);
       }
     };
     if (sqlCode) {
+      setError(null);
       setIsLoading(true);
       fetchData();
     }
@@ -69,6 +75,7 @@ export default function RequestShare(props: RequestShareProps) {
         setOption(data.__result__);
       } catch (error: any) {
         setOption(null);
+        setError(error);
         console.error(error);
       } finally {
         setIsLoading(false);
@@ -91,6 +98,16 @@ export default function RequestShare(props: RequestShareProps) {
         </Backdrop>
       )}
       {option && <ReactEcharts option={option} />}
+      {error && (
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={true}
+        >
+          <Alert variant="filled" severity="error">
+            {error}
+          </Alert>
+        </Backdrop>
+      )}
     </>
   );
 }

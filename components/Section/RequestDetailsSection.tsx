@@ -9,13 +9,17 @@ import { Pages } from 'lib/constants';
 import Highlighter from 'components/Section/CodeSection';
 import { panelItem } from 'pages/panels';
 import Layout from 'components/Layout';
+import PanelShareDialog from 'components/Dialog/PanelShareDialog';
+import { QueryParameterItemType } from 'components/Section/RequestShare';
 
 export default function RequestDetails(props: {
+  id: string;
   title: string;
   data: panelItem;
   description: string;
+  parameters: QueryParameterItemType[];
 }) {
-  const { title, data, description } = props;
+  const { id, title, data, description, parameters } = props;
 
   return (
     <Layout
@@ -34,6 +38,15 @@ export default function RequestDetails(props: {
             <Link href={Pages.Panels}>My Panels</Link>
             <Typography color="text.primary">{title}</Typography>
           </Breadcrumbs>
+
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+            }}
+          >
+            <PanelShareDialog parameters={parameters} panelId={id} />
+          </Box>
 
           <Typography variant="h4" component="h2" gutterBottom>
             Plugin Config

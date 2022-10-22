@@ -64,10 +64,11 @@ const DEFAULT_QUERY_JSON = {
 interface SubmitPanelDialogProps {
   sql: string;
   js: string;
+  disabled?: boolean;
 }
 
 export default function SubmitPanelDialog(props: SubmitPanelDialogProps) {
-  const { sql, js } = props;
+  const { sql, js, disabled } = props;
   const [open, setOpen] = React.useState(false);
 
   const [name, setName] = React.useState('');
@@ -145,6 +146,10 @@ export default function SubmitPanelDialog(props: SubmitPanelDialogProps) {
         variant="outlined"
         startIcon={<PublishIcon />}
         onClick={handleClickOpen}
+        disabled={disabled}
+        sx={{
+          margin: '2rem 0',
+        }}
       >
         Submit
       </Button>

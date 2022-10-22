@@ -226,7 +226,11 @@ export default function NewRequestSection() {
         >
           Submit
         </Button> */}
-        <SubmitPanelDialog sql={sqlValue} js={jsCodeValue} />
+        <SubmitPanelDialog
+          sql={sqlValue}
+          js={jsCodeValue}
+          disabled={!(sqlValue && jsCodeValue && jsCodeResult)}
+        />
       </Box>
     </Box>
   );

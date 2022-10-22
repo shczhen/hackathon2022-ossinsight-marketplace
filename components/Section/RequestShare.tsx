@@ -1,10 +1,16 @@
 import * as React from 'react';
-import { useRouter } from 'next/router';
+import { useRouter, NextRouter } from 'next/router';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import ReactEcharts from 'echarts-for-react';
+
+import axios from 'lib/axios';
+import { QueryResult } from 'pages/api/sql/execute';
 
 export interface RequestShareProps {
-  params: {
+  parameters: {
     name: string;
-    replaces: string | number;
+    placeholder: string;
     type: string;
     validate: {
       type: string;
@@ -16,19 +22,90 @@ export interface RequestShareProps {
 }
 
 export default function RequestShare(props: RequestShareProps) {
-  const { params, sql, js } = props;
+  const { parameters, sql, js } = props;
+
+  const [sqlCode, setSqlCode] = React.useState('');
+  const [sqlResult, setSqlResult] = React.useState<QueryResult | null>(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [option, setOption] = React.useState<any>(null);
 
   const router = useRouter();
 
-  const { type } = router.query;
+  React.useEffect(() => {
+    const newSql = replaceSql(sql, parameters, router.query);
+    setSqlCode(newSql);
+  }, [sql, parameters, router.query]);
 
-  return <></>;
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await axios
+          .post('/api/sql/execute', {
+            sql: sqlCode,
+          })
+          .then((res) => res.data);
+        setSqlResult(data as QueryResult);
+      } catch (error: any) {
+        setSqlResult(null);
+        console.error(error);
+        setIsLoading(false);
+      }
+    };
+    if (sqlCode) {
+      setIsLoading(true);
+      fetchData();
+    }
+  }, [sqlCode]);
+
+  React.useEffect(() => {
+    const fetchOption = async () => {
+      try {
+        const data = await axios
+          .post('/api/vm/js', {
+            scripts: js,
+            data: sqlResult?.data,
+          })
+          .then((res) => res.data);
+        setOption(data.__result__);
+      } catch (error: any) {
+        setOption(null);
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (sqlResult && js) {
+      fetchOption();
+    }
+  }, [sqlResult, js]);
+
+  return (
+    <>
+      {isLoading && (
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={true}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
+      {option && <ReactEcharts option={option} />}
+    </>
+  );
 }
 
-function replaceSql(sql: string, params: RequestShareProps['params']) {
+function replaceSql(
+  sql: string,
+  parameters: RequestShareProps['parameters'],
+  data: NextRouter['query']
+) {
   let newSql = sql;
-  params.forEach((param) => {
-    newSql = newSql.replace(param.replaces, param.name);
+  parameters.forEach((param) => {
+    const targetValue = data[param.name];
+    if (targetValue) {
+      newSql = newSql.replace(param.placeholder, targetValue as string);
+    }
   });
   return newSql;
 }

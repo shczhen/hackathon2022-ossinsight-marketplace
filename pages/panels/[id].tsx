@@ -27,7 +27,11 @@ export default function RequestDetailsPage(props: { data: panelItem }) {
   return (
     <>
       {type === 'share' ? (
-        <RequestShare params={queryData.params} sql={data.sql} js={data.js} />
+        <RequestShare
+          parameters={queryData.parameters}
+          sql={data.sql}
+          js={data.js}
+        />
       ) : (
         <RequestDetails title={title} data={data} description={description} />
       )}

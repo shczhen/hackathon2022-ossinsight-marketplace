@@ -2,16 +2,9 @@ import vm from 'node:vm';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
+import axios from 'lib/axios';
 
-import {
-  simpleGit,
-  SimpleGit,
-  CleanOptions,
-  SimpleGitOptions,
-} from 'simple-git';
-import { writeFileSync, mkdirSync } from 'fs';
-
-import { getUserDetails } from 'lib/github';
+import { getUserDetails, createPr } from 'lib/github';
 
 declare module 'next-auth' {
   interface Session {
@@ -32,47 +25,25 @@ export default async function handler(
   const login = 'test';
   const { sql, js, option } = req?.body || {};
 
-  const options: Partial<SimpleGitOptions> = {
-    baseDir: process.cwd(),
-    binary: 'git',
-    maxConcurrentProcesses: 6,
-    trimmed: false,
-  };
-
-  // const git: SimpleGit = simpleGit(options).clean(CleanOptions.FORCE);
-  const git: SimpleGit = simpleGit(options);
-
-  await git.clone(
-    `https://.:${process.env.GITHUB_BOT_TOKEN}@github.com/czhen-bot/hackathon2022-ossinsight-marketplace.git`
-  );
-  const git2: SimpleGit = simpleGit(
-    `${process.cwd()}/hackathon2022-ossinsight-marketplace`,
+  await axios.post(
+    `https://api.github.com/repos/shczhen/hackathon2022-ossinsight-marketplace/actions/workflows/plugin-pr.yml/dispatches`,
     {
-      binary: 'git',
+      // ref: 'main',
+      ref: 'add-pr-api',
+      inputs: {
+        plugin: `${login}-${new Date().getTime()}`,
+        sql,
+        js,
+        option,
+      },
+    },
+    {
+      headers: {
+        Accept: `application/vnd.github+json`,
+        Authorization: `Bearer ${process.env.GITHUB_BOT_TOKEN}`,
+      },
     }
   );
 
-  const branchName = `login-${new Date().getTime()}`;
-
-  await git2.addConfig('user.name', 'github-actions');
-  await git2.addConfig('user.email', 'github-actions@github.com');
-  await git2.pull();
-  await git2.checkout(`-b${branchName}`);
-
-  mkdirSync(
-    `${process.cwd()}/hackathon2022-ossinsight-marketplace/plugin-test/${branchName}`,
-    { recursive: true }
-  );
-  writeFileSync(
-    `${process.cwd()}/hackathon2022-ossinsight-marketplace/plugin-test/${branchName}/query.sql`,
-    sql || 'select * from ssss'
-  );
-
-  await git2.add(
-    `${process.cwd()}/hackathon2022-ossinsight-marketplace/plugin-test/${branchName}`
-  );
-  await git2.commit('add plugin');
-  await git2.push(['-u', 'origin', branchName]);
-
-  res.status(200).json({ id: branchName });
+  res.status(200).end();
 }

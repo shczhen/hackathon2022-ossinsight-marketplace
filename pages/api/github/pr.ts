@@ -40,7 +40,7 @@ export default async function handler(
     {
       headers: {
         Accept: `application/vnd.github+json`,
-        Authorization: `Bearer ${process.env.GITHUB_BOT_TOKEN}`,
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
       },
     }
   );

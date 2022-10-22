@@ -1,0 +1,1 @@
+{title:Test,name:test,topic:[],description:,query:{definition:./query.json,template:./template.sql,ignoreCache:true},render:{cache:{ttl:3600},src:./render.js},author:[],shared:true}

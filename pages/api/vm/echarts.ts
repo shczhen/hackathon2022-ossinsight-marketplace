@@ -26,7 +26,7 @@ export default async function handler(
   // };
   const code = `${scripts} result = option;`;
 
-  console.log(context);
+  // console.log(context);
 
   try {
     vm.runInContext(code, context);

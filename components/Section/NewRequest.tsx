@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -14,32 +15,8 @@ import ResultJSTab from 'components/Tab/ResultJSTab';
 import ResultEchartsTab from 'components/Tab/ResultEchartsTab';
 
 import axios from 'lib/axios';
+import { QueryResult } from 'pages/api/sql/execute';
 
-// ! TOREMOVE
-const MOCK_SQL_RESULT_JSON = {
-  data: [
-    {
-      actor_login: 'tiancaiamao',
-      comments: 9748,
-    },
-    {
-      actor_login: 'zz-jason',
-      comments: 9540,
-    },
-    {
-      actor_login: 'coocood',
-      comments: 8685,
-    },
-    {
-      actor_login: 'shenli',
-      comments: 8573,
-    },
-    {
-      actor_login: 'zimulala',
-      comments: 7382,
-    },
-  ],
-};
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -78,8 +55,8 @@ export default function NewRequestSection() {
   const [resultTabValue, setResultTabValue] = React.useState(0);
 
   const [sqlValue, setSqlValue] = React.useState('');
-  // const [sqlResult, setSqlResult] = React.useState<any>(null);
-  const [sqlResult, setSqlResult] = React.useState<any>(MOCK_SQL_RESULT_JSON);
+  const [sqlLoading, setSqlLoading] = React.useState(false);
+  const [sqlResult, setSqlResult] = React.useState<QueryResult | null>(null);
   const [jsCodeValue, setJsCodeValue] = React.useState('');
   const [jsCodeResult, setJsCodeResult] = React.useState<any>(null);
   const [echartValue, setEchartValue] = React.useState('');
@@ -109,6 +86,26 @@ export default function NewRequestSection() {
       }
     };
 
+  const handleSubmitSQL = async () => {
+    setSqlLoading(true);
+    try {
+      const data = await axios
+        .post('/api/sql/execute', {
+          sql: sqlValue,
+        })
+        .then((res) => res.data);
+      setSqlResult(data as QueryResult);
+    } catch (error: any) {
+      setSqlResult(null);
+      enqueueSnackbar(`${error?.response?.data?.message || error.message}`, {
+        variant: 'error',
+      });
+      console.error(error);
+    } finally {
+      setSqlLoading(false);
+    }
+  };
+
   const handleSubmitJSCode = async () => {
     try {
       const data = await axios
@@ -119,6 +116,7 @@ export default function NewRequestSection() {
         .then((res) => res.data);
       setJsCodeResult(data.result);
     } catch (error: any) {
+      setJsCodeResult(null);
       enqueueSnackbar(`${error?.response?.data?.error || error.message}`, {
         variant: 'error',
       });
@@ -132,6 +130,25 @@ export default function NewRequestSection() {
         .post('/api/vm/echarts', {
           scripts: echartValue,
           data: jsCodeResult,
+        })
+        .then((res) => res.data);
+      setEchartResult(data.result);
+    } catch (error: any) {
+      setEchartResult(null);
+      enqueueSnackbar(`${error?.response?.data?.error || error.message}`, {
+        variant: 'error',
+      });
+      console.error(error);
+    }
+  };
+
+  const handleSubmitReview = async () => {
+    try {
+      const data = await axios
+        .post('/api/github/pr', {
+          options: echartValue,
+          js: jsCodeValue,
+          sql: sqlValue,
         })
         .then((res) => res.data);
       setEchartResult(data.result);
@@ -160,14 +177,16 @@ export default function NewRequestSection() {
             marginLeft: 'auto',
           }}
         >
-          <Button
+          <LoadingButton
             variant="contained"
+            onClick={handleSubmitSQL}
+            loading={sqlLoading}
             sx={{
               display: value === 0 ? 'inline-flex' : 'none',
             }}
           >
             Run SQL
-          </Button>
+          </LoadingButton>
           <Button
             variant="contained"
             disabled={jsCodeValue === ''}
@@ -197,7 +216,7 @@ export default function NewRequestSection() {
         <JSTab />
       </TabPanel> */}
       <Box display={value === 0 ? 'block' : 'none'}>
-        <SQLTab />
+        <SQLTab onChange={handleEditorInputChange('sql')} />
       </Box>
       <Box display={value === 1 ? 'block' : 'none'}>
         <JSTab onChange={handleEditorInputChange('js')} />
@@ -224,7 +243,7 @@ export default function NewRequestSection() {
         }}
       >
         <Box display={resultTabValue === 0 ? 'block' : 'none'}>
-          <ResultSQLTab />
+          <ResultSQLTab data={sqlResult} />
         </Box>
         <Box display={resultTabValue === 1 ? 'block' : 'none'}>
           <ResultJSTab data={jsCodeResult} />
@@ -232,6 +251,20 @@ export default function NewRequestSection() {
         <Box display={resultTabValue === 2 ? 'block' : 'none'}>
           <ResultEchartsTab data={echartResult} />
         </Box>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+        }}
+      >
+        <Button
+          variant="contained"
+          disabled={!(sqlValue && jsCodeValue && echartValue)}
+          onClick={handleSubmitReview}
+        >
+          Submit
+        </Button>
       </Box>
     </Box>
   );

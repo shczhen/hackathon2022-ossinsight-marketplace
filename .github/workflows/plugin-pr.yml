@@ -39,9 +39,11 @@ jobs:
           git checkout -b ${{ inputs.plugin }}
 
           sudo mkdir -p plugins/${{ inputs.plugin }}
-          echo "${{ inputs.sql }}"" > plugins/${{ inputs.plugin }}/query.sql
-          echo "${{ inputs.js }}" > plugins/${{ inputs.plugin }}/index.js
-          echo "${{ inputs.option }}" > plugins/${{ inputs.plugin }}/option.js
+          sudo chmod -R 777 plugins/${{ inputs.plugin }}
+          sudo echo "${{ inputs.sql }}" > plugins/${{ inputs.plugin }}/query.sql
+          sudo echo "${{ inputs.js }}" > plugins/${{ inputs.plugin }}/index.js
+          sudo echo "${{ inputs.option }}" > plugins/${{ inputs.plugin }}/option.js
+          ls -l plugins/${{ inputs.plugin }}
 
           git add plugins/${{ inputs.plugin }}
           git commit -m "add plugin ${{ inputs.plugin }}"
@@ -52,6 +54,6 @@ jobs:
           curl \
           -X POST \
           -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ secrets.CZHEN_BOT_GH_TOKEN }}" \                                                
+          -H "Authorization: Bearer ${{ secrets.CZHEN_BOT_GH_TOKEN }}" \
           https://api.github.com/repos/shczhen/hackathon2022-ossinsight-marketplace/pulls \
           -d '{"title":"[plugin] ${{ inputs.plugin }}","body":"Please pull these awesome changes in!","head":"czhen-bot:hackathon2022-ossinsight-marketplace:${{ inputs.plugin }}","base":"main"}'

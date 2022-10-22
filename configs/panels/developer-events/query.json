@@ -19,14 +19,14 @@
     }
   ],
   "results": {
-    "type": "type",
+    "type": "object",
     "properties": {
-      "event_month": {
+      "type": {
         "type": "string",
         "description": "Event type"
       },
-      "repo_id": {
-        "type": "num",
+      "num": {
+        "type": "number",
         "description": "Number of event"
       }
     },

@@ -8,16 +8,31 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReactJson, { ReactJsonViewProps } from 'react-json-view';
 
 const PLACEHOLDER = `/**
-* Implement a function here.
+* Implement the main function here.
 * We will pass the result of your SQL query to the this function.
+* You should not use any variables starting with '__' in this function. (such as '__result__')
 * @param data Result of your SQL query.
-* @param result Default {}. You can set this value to pass to the next step.
+* @param option ECharts option.
 */
-function main(data) {
- // Example:
- const result = data;
- return result;
-};`;
+function main(data) { 
+ // Do remember to return the echart option here.
+ const myOption = {
+   xAxis: {
+     type: 'category',
+     data: data.map(i => i.actor_login)
+   },
+   yAxis: {
+     type: 'value'
+   },
+   series: [
+     {
+       data: data.map(i => i.comments),
+       type: 'bar'
+     }
+   ]
+ };
+ return myOption;
+}`;
 
 export interface JSTabProps {
   onChange?: (code: string) => void;
@@ -48,3 +63,28 @@ export default function JSTab(props: JSTabProps) {
     </Box>
   );
 }
+
+// /**
+//  * Implement the main function here.
+//  * You should not use any variables starting with '_' in this function.
+//  * We will pass the result of your SQL query to the this function.
+//  * @param data Result of your SQL query.
+//  */
+// function main(data) {
+//   // Do remember to return the echart option here.
+//   return {
+//     xAxis: {
+//       type: 'category',
+//       data: data.map(i => i.actor_login)
+//     },
+//     yAxis: {
+//       type: 'value'
+//     },
+//     series: [
+//       {
+//         data: data.map(i => i.comments),
+//         type: 'bar'
+//       }
+//     ]
+//   };
+// }

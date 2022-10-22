@@ -15,7 +15,7 @@ export default async function handler(
 
   const { scripts, data } = req?.body || {};
 
-  const context = { data: data.data, result: null };
+  const context = { __data__: data, __result__: null };
   vm.createContext(context); // Contextify the object.
 
   // Code Example:
@@ -24,7 +24,7 @@ export default async function handler(
   // result.length = dataLength;
   // return result;
   // };
-  const code = `${scripts} result = main(data);`;
+  const code = `${scripts} __result__ = main(__data__);`;
 
   // console.log(context);
 

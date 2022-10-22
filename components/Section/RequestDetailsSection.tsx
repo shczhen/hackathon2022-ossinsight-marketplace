@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 import { Pages } from 'lib/constants';
 import Highlighter from 'components/Section/CodeSection';
-import { panelItem } from 'pages/requests';
+import { panelItem } from 'pages/panels';
 import Layout from 'components/Layout';
 
 export default function RequestDetails(props: {

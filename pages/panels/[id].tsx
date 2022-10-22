@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { panelItem } from 'pages/requests';
+import { panelItem } from 'pages/panels';
 import Layout from 'components/Layout';
 import { Pages } from 'lib/constants';
 import Highlighter from 'components/Section/CodeSection';

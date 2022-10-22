@@ -26,7 +26,7 @@ const NewRequestPage: NextPage = () => {
             }}
           >
             <Link href={Pages.Home}>Home</Link>
-            <Link href={Pages.Requests}>Requests</Link>
+            <Link href={Pages.Panels}>My Panels</Link>
             <Typography color="text.primary">Create New Request</Typography>
           </Breadcrumbs>
 

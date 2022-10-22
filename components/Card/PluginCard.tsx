@@ -35,7 +35,7 @@ export default function BasicCard(props: {
         <Button
           size="small"
           onClick={() => {
-            router.push(`/requests/${id}`);
+            router.push(`/panels/${id}`);
           }}
         >
           View Details

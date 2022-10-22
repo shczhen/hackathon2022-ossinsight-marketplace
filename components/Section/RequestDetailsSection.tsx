@@ -31,7 +31,7 @@ export default function RequestDetails(props: {
             }}
           >
             <Link href={Pages.Home}>Home</Link>
-            <Link href={Pages.Requests}>Requests</Link>
+            <Link href={Pages.Panels}>My Panels</Link>
             <Typography color="text.primary">{title}</Typography>
           </Breadcrumbs>
 

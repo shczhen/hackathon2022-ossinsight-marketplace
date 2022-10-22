@@ -1,6 +1,6 @@
 export enum Pages {
   Home = '/',
-  Requests = '/requests',
-  Request = '/requests/:id',
-  NewRequest = '/requests/new',
+  Panels = '/panels',
+  Panel = '/panels/:id',
+  Newpanel = '/panels/new',
 }

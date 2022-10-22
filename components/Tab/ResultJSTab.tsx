@@ -49,7 +49,11 @@ export interface ResultJSTabProps {
 
 export default function ResultJSTab(props: ResultJSTabProps) {
   return (
-    <Box>
+    <Box
+      sx={{
+        padding: '2rem 0',
+      }}
+    >
       {/* <Typography> finish in xx.x s</Typography> */}
       {props?.data ? (
         <BrowserOnlyReactJson src={props.data} />

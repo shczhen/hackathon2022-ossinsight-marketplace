@@ -7,12 +7,12 @@ import Link from 'next/link';
 
 import { Pages } from 'lib/constants';
 import Highlighter from 'components/Section/CodeSection';
-import { pluginItem } from 'pages/requests';
+import { panelItem } from 'pages/requests';
 import Layout from 'components/Layout';
 
 export default function RequestDetails(props: {
   title: string;
-  data: pluginItem;
+  data: panelItem;
   description: string;
 }) {
   const { title, data, description } = props;
@@ -38,7 +38,7 @@ export default function RequestDetails(props: {
           <Typography variant="h4" component="h2" gutterBottom>
             Plugin Config
           </Typography>
-          <Highlighter content={data.plugin} language={['json']} />
+          <Highlighter content={data.panel} language={['json']} />
 
           <Typography variant="h4" component="h2" gutterBottom>
             Query Config

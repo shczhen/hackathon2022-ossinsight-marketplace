@@ -30,7 +30,7 @@ const MOCK_SQL_RESULT_JSON = {
   ],
 };
 
-export default function ResultSQLTab(props: { data: QueryResult }) {
+export default function ResultSQLTab(props: { data: QueryResult | null }) {
   const { data } = props;
 
   const { totalCost, isAP, data: result } = data || {};

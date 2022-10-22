@@ -33,8 +33,7 @@ export default async function handler(
   await axios.post(
     `https://api.github.com/repos/shczhen/hackathon2022-ossinsight-marketplace/actions/workflows/plugin-pr.yml/dispatches`,
     {
-      // ref: 'main',
-      ref: 'add-pr-api',
+      ref: 'main',
       inputs: {
         plugin: `${login}-${new Date().getTime()}`,
         sql,

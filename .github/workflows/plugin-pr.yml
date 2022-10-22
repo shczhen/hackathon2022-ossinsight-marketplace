@@ -39,7 +39,7 @@ jobs:
           git checkout -b ${{ inputs.plugin }}
 
           sudo mkdir -p plugins/${{ inputs.plugin }}
-          echo "${{ inputs.sql }}"" > plugins/${{ inputs.plugin }}/query.sql
+          echo "${{ inputs.sql }}" > plugins/${{ inputs.plugin }}/query.sql
           echo "${{ inputs.js }}" > plugins/${{ inputs.plugin }}/index.js
           echo "${{ inputs.option }}" > plugins/${{ inputs.plugin }}/option.js
 

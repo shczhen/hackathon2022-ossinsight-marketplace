@@ -12,6 +12,7 @@ import JSTab, { PLACEHOLDER_JS } from 'components/Tab/JSTab';
 import ResultSQLTab from 'components/Tab/ResultSQLTab';
 import ResultJSTab from 'components/Tab/ResultJSTab';
 import ResultEchartsTab from 'components/Tab/ResultEchartsTab';
+import SubmitPanelDialog from 'components/Dialog/SubmitPanelDialog';
 
 import axios from 'lib/axios';
 import { QueryResult } from 'pages/api/sql/execute';
@@ -215,7 +216,7 @@ export default function NewRequestSection() {
           justifyContent: 'flex-end',
         }}
       >
-        <Button
+        {/* <Button
           variant="contained"
           disabled={!(sqlValue && jsCodeValue && jsCodeResult)}
           onClick={handleSubmitReview}
@@ -224,7 +225,8 @@ export default function NewRequestSection() {
           }}
         >
           Submit
-        </Button>
+        </Button> */}
+        <SubmitPanelDialog sql={sqlValue} js={jsCodeValue} />
       </Box>
     </Box>
   );

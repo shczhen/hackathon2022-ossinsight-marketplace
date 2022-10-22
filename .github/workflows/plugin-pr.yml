@@ -28,7 +28,7 @@ jobs:
         with:
           repository: 'czhen-bot/hackathon2022-ossinsight-marketplace'
           ref: 'main'
-          token: ${{ secrets.GITHUB_BOT_TOKEN }}
+          token: ${{ secrets.CZHEN_BOT_GH_TOKEN }}
           path: 'bot_repo'
       - name: create a new branch and commit
         run: |
@@ -52,6 +52,6 @@ jobs:
           curl \
           -X POST \
           -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ secrets.GITHUB_BOT_TOKEN }}" \                                                
+          -H "Authorization: Bearer ${{ secrets.CZHEN_BOT_GH_TOKEN }}" \                                                
           https://api.github.com/repos/shczhen/hackathon2022-ossinsight-marketplace/pulls \
           -d '{"title":"[plugin] ${{ inputs.plugin }}","body":"Please pull these awesome changes in!","head":"czhen-bot:hackathon2022-ossinsight-marketplace:${{ inputs.plugin }}","base":"main"}'

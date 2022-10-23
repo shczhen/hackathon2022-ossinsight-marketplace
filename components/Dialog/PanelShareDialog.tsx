@@ -108,7 +108,7 @@ function generateSvgPath(
   panelId: string,
   parameters: QueryParameterItemType[]
 ) {
-  const result = `/api/panels/svg/${panelId}?`;
+  const result = `/api/panels/${panelId}/svg?`;
   const params = parameters.map((item) => {
     return `${item.name}=${item.placeholder}`;
   });

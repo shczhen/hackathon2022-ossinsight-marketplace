@@ -42,15 +42,15 @@ jobs:
 
           git checkout -b new-panel-${{ inputs.panelName }}
 
-          sudo mkdir -p plugins/panels/${{ inputs.panelName }}
-          sudo chmod -R 777 plugins/panels/${{ inputs.panelName }}
-          sudo echo '${{ inputs.panel }}' > plugins/panels/${{ inputs.panelName }}/panel.json
-          sudo echo "${{ inputs.script }}" > plugins/panels/${{ inputs.panelName }}/render.js
-          sudo echo '${{ inputs.query }}' > plugins/panels/${{ inputs.panelName }}/query.json
-          sudo echo "${{ inputs.sql }}" > plugins/panels/${{ inputs.panelName }}/template.sql
-          ls -l plugins/panels/${{ inputs.panelName }}
+          sudo mkdir -p configs/panels/${{ inputs.panelName }}
+          sudo chmod -R 777 configs/panels/${{ inputs.panelName }}
+          sudo echo '${{ inputs.panel }}' > configs/panels/${{ inputs.panelName }}/panel.json
+          sudo echo "${{ inputs.script }}" > configs/panels/${{ inputs.panelName }}/render.js
+          sudo echo '${{ inputs.query }}' > configs/panels/${{ inputs.panelName }}/query.json
+          sudo echo "${{ inputs.sql }}" > configs/panels/${{ inputs.panelName }}/template.sql
+          ls -l configs/panels/${{ inputs.panelName }}
 
-          git add plugins/panels/${{ inputs.panelName }}
+          git add configs/panels/${{ inputs.panelName }}
           git commit -m "config: add new panel ${{ inputs.panelName }}"
           git push -u origin new-panel-${{ inputs.panelName }}
 

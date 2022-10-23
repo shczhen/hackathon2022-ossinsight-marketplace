@@ -13,7 +13,7 @@ function main(data) {
       }
     },
     yAxis: {},
-    series: [{ type: 'bar' }]
+    series: [{ type: 'pie' }]
   };
 
   return option;

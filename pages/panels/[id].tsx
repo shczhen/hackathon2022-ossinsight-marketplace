@@ -33,13 +33,22 @@ export default function RequestDetailsPage(props: { data: panelItem }) {
           js={data.js}
         />
       ) : (
-        <RequestDetails
-          id={data.name}
-          title={title}
-          data={data}
-          description={description}
-          parameters={queryData.parameters}
-        />
+        <>
+          <RequestDetails
+            id={data.name}
+            title={title}
+            data={data}
+            description={description}
+            parameters={queryData.parameters}
+            chart={
+              <RequestShare
+                parameters={queryData.parameters}
+                sql={data.sql}
+                js={data.js}
+              />
+            }
+          />
+        </>
       )}
     </>
   );

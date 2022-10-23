@@ -13,10 +13,21 @@ import { QueryParameterItemType } from 'components/Section/RequestShare';
 interface PanelShareDialogProps {
   panelId: string;
   parameters: QueryParameterItemType[];
+  type?: 'iframe' | 'svg';
+  label?: string;
+  title: string;
+  description: string;
 }
 
 export default function PanelShareDialog(props: PanelShareDialogProps) {
-  const { panelId, parameters } = props;
+  const {
+    panelId,
+    parameters,
+    type = 'iframe',
+    label = 'Share',
+    title,
+    description,
+  } = props;
 
   const [open, setOpen] = React.useState(false);
   const [host, setHost] = React.useState('');
@@ -30,7 +41,7 @@ export default function PanelShareDialog(props: PanelShareDialogProps) {
   };
 
   React.useEffect(() => {
-    setHost(window.location.host);
+    setHost(window.location.protocol + '//' + window.location.host);
   }, []);
 
   return (
@@ -40,7 +51,7 @@ export default function PanelShareDialog(props: PanelShareDialogProps) {
         startIcon={<ShareIcon />}
         onClick={handleClickOpen}
       >
-        Share
+        {label}
       </Button>
 
       <Dialog
@@ -49,17 +60,16 @@ export default function PanelShareDialog(props: PanelShareDialogProps) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{'Share this panel'}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Use this link as iframe src to share this panel with your friends.
+            {description}
           </DialogContentText>
           <Highlighter
-            content={'https://' + host + generateShareLink(panelId, parameters)}
+            content={host + generateSharePath(type, panelId, parameters)}
           />
         </DialogContent>
         <DialogActions>
-          {/* <Button onClick={handleClose}>Disagree</Button> */}
           <Button onClick={handleClose} autoFocus>
             Close
           </Button>
@@ -69,13 +79,38 @@ export default function PanelShareDialog(props: PanelShareDialogProps) {
   );
 }
 
-function generateShareLink(
+function generateSharePath(
+  type: 'iframe' | 'svg',
   panelId: string,
   parameters: QueryParameterItemType[]
 ) {
-  let result = `/panels/${panelId}?`;
+  switch (type) {
+    case 'svg':
+      return generateSvgPath(panelId, parameters);
+    case 'iframe':
+    default:
+      return generateIframePath(panelId, parameters);
+  }
+}
+
+function generateIframePath(
+  panelId: string,
+  parameters: QueryParameterItemType[]
+) {
+  const result = `/panels/${panelId}?type=share&`;
   const params = parameters.map((item) => {
-    return `${item.name}=<${item.type}>`;
+    return `${item.name}=${item.placeholder}`;
+  });
+  return result + params.join('&');
+}
+
+function generateSvgPath(
+  panelId: string,
+  parameters: QueryParameterItemType[]
+) {
+  const result = `/api/panels/${panelId}/svg?`;
+  const params = parameters.map((item) => {
+    return `${item.name}=${item.placeholder}`;
   });
   return result + params.join('&');
 }

@@ -1,0 +1,35 @@
+{
+  "name": "Developer Events",
+  "description": "Query the number of events of each type for a developer.",
+  "public": true,
+  "cache": {
+    "ttl": 3600
+  },
+  "parameters": [
+    {
+      "name": "devName",
+      "placeholder": "Icemap",
+      "type": "array",
+      "validate": [
+        {
+          "type": "REGEXP",
+          "pattern": "^[a-zA-Z0-9_-]*$"
+        }
+      ]
+    }
+  ],
+  "results": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "type": "string",
+        "description": "Event type"
+      },
+      "num": {
+        "type": "number",
+        "description": "Number of event"
+      }
+    },
+    "required": ["type", "num"]
+  }
+}

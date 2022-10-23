@@ -19,7 +19,18 @@ export default function BasicCard(props: {
   const router = useRouter();
 
   return (
-    <Card sx={{ minWidth: 275 }}>
+    <Card
+      sx={{
+        minWidth: 275,
+        height: '100%',
+
+        '&.MuiPaper-root.MuiCard-root': {
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        },
+      }}
+    >
       <CardContent>
         {/* <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           Word of the Day

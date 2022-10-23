@@ -6,12 +6,16 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 import Layout from 'components/Layout';
 import PluginCard from 'components/Card/PluginCard';
 import { Pages } from 'lib/constants';
+import axios from 'lib/axios';
+import { BasicCardSkeleton } from 'components/Card/PluginCard';
 
 export interface panelItem {
+  panelData?: any;
   name: string;
   panel: string;
   query: string;
@@ -21,6 +25,40 @@ export interface panelItem {
 
 export default function RequestHomePage(props: { results: panelItem[] }) {
   const { results } = props;
+
+  const [userLogin, setUserLogin] = React.useState('');
+  const [filteredResult, setFilteredResult] = React.useState<panelItem[]>([]);
+
+  const { data: session, status } = useSession();
+
+  React.useEffect(() => {
+    const getLogin = async () => {
+      try {
+        const data = await axios.get('/api/github/me').then((res) => res.data);
+        console.log(data);
+        const { login } = data;
+        setUserLogin(login);
+      } catch (error: any) {
+        console.error(error);
+        setUserLogin('');
+      }
+    };
+    if (session) {
+      getLogin();
+    }
+  }, [session]);
+
+  React.useEffect(() => {
+    if (userLogin) {
+      const filtered = results
+        .map((i) => ({
+          ...i,
+          panelData: JSON.parse(i.panel),
+        }))
+        .filter((i) => i.panelData?.author?.includes(userLogin));
+      setFilteredResult(filtered);
+    }
+  }, [results, userLogin]);
 
   return (
     <Layout
@@ -39,8 +77,8 @@ export default function RequestHomePage(props: { results: panelItem[] }) {
             <Typography color="text.primary">My Panels</Typography>
           </Breadcrumbs>
 
-          {results.map((panel) => {
-            const panelData = JSON.parse(panel.panel);
+          {filteredResult.map((panel) => {
+            const panelData = panel.panelData;
             return (
               <Box
                 key={panel.name}
@@ -58,6 +96,21 @@ export default function RequestHomePage(props: { results: panelItem[] }) {
               </Box>
             );
           })}
+
+          {filteredResult.length === 0 && userLogin && (
+            <Typography variant="body2">Empty</Typography>
+          )}
+
+          {status === 'loading' && !userLogin && (
+            <Box
+              sx={{
+                height: 400,
+                width: 300,
+              }}
+            >
+              <BasicCardSkeleton />
+            </Box>
+          )}
         </Box>
       </Container>
     </Layout>

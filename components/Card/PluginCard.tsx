@@ -5,6 +5,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Skeleton from '@mui/material/Skeleton';
 import { useRouter } from 'next/router';
 
 export default function BasicCard(props: {
@@ -41,6 +42,26 @@ export default function BasicCard(props: {
           View Details
         </Button>
       </CardActions>
+    </Card>
+  );
+}
+
+export function BasicCardSkeleton(props: any) {
+  return (
+    <Card sx={{ minWidth: 275 }}>
+      <CardContent>
+        <Typography variant="h5" component="div">
+          <Skeleton height={64} />
+        </Typography>
+        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          <Skeleton />
+        </Typography>
+        <Typography variant="body2">
+          <Skeleton />
+          <Skeleton />
+        </Typography>
+      </CardContent>
+      <CardActions></CardActions>
     </Card>
   );
 }

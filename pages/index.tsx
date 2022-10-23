@@ -1,5 +1,8 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { serialize } from 'next-mdx-remote/serialize';
+import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
+import { readFileSync } from 'fs';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -8,8 +11,11 @@ import ReviewsIcon from '@mui/icons-material/Reviews';
 
 import Layout from 'components/Layout';
 import { Pages } from 'lib/constants';
+import 'github-markdown-css/github-markdown-light.css';
 
-const Home: NextPage = () => {
+const Home: NextPage<{ source: MDXRemoteSerializeResult }> = (props: {
+  source: MDXRemoteSerializeResult;
+}) => {
   const router = useRouter();
 
   return (
@@ -47,9 +53,21 @@ const Home: NextPage = () => {
             </Button>
           </Box>
         </Box>
+        <Box className="markdown-body">
+          <MDXRemote {...props.source} />
+        </Box>
       </Container>
     </Layout>
   );
 };
+
+export async function getStaticProps() {
+  // MDX text - can be from a local file, database, anywhere
+  const srcMdContent = readFileSync('README.md', 'utf8').toString();
+  // console.log(srcMdContent);
+  // const source = 'Some **mdx** text, with a component <Heading />';
+  const mdxSource = await serialize(srcMdContent);
+  return { props: { source: mdxSource } };
+}
 
 export default Home;

@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import ReviewsIcon from '@mui/icons-material/Reviews';
+import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 
 import Layout from 'components/Layout';
 import { Pages } from 'lib/constants';
@@ -61,27 +62,21 @@ const Home: NextPage<{ results: panelItem[] }> = (props: {
         {/* <Box className="markdown-body">
           <MDXRemote {...props.source} />
         </Box> */}
-        <Box>
+        <Grid container spacing={2}>
           {results.map((panel) => {
             const panelData = JSON.parse(panel.panel);
             return (
-              <Box
-                key={panel.name}
-                sx={{
-                  height: 400,
-                  width: 300,
-                }}
-              >
+              <Grid key={panel.name} xs={6} md={4} xl={3}>
                 <PluginCard
                   id={panel.name}
                   title={panelData.title}
                   desc={panelData.description}
                   author={panelData.author}
                 />
-              </Box>
+              </Grid>
             );
           })}
-        </Box>
+        </Grid>
       </Container>
     </Layout>
   );

@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 
 import Layout from 'components/Layout';
 import PluginCard from 'components/Card/PluginCard';
@@ -77,26 +78,21 @@ export default function RequestHomePage(props: { results: panelItem[] }) {
             <Typography color="text.primary">My Panels</Typography>
           </Breadcrumbs>
 
-          {filteredResult.map((panel) => {
-            const panelData = panel.panelData;
-            return (
-              <Box
-                key={panel.name}
-                sx={{
-                  height: 400,
-                  width: 300,
-                }}
-              >
-                <PluginCard
-                  id={panel.name}
-                  title={panelData.title}
-                  desc={panelData.description}
-                  author={panelData.author}
-                />
-              </Box>
-            );
-          })}
-
+          <Grid container spacing={2}>
+            {filteredResult.map((panel) => {
+              const panelData = panel.panelData;
+              return (
+                <Grid key={panel.name} xs={6} md={4} xl={3}>
+                  <PluginCard
+                    id={panel.name}
+                    title={panelData.title}
+                    desc={panelData.description}
+                    author={panelData.author}
+                  />
+                </Grid>
+              );
+            })}
+          </Grid>
           {filteredResult.length === 0 && userLogin && (
             <Typography variant="body2">Empty</Typography>
           )}

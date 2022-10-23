@@ -44,9 +44,9 @@ jobs:
 
           sudo mkdir -p panels/${{ inputs.panelName }}
           sudo chmod -R 777 panels/${{ inputs.panelName }}
-          sudo echo "${{ inputs.panel }}" > panels/${{ inputs.panelName }}/panel.json
+          sudo echo '${{ inputs.panel }}' > panels/${{ inputs.panelName }}/panel.json
           sudo echo "${{ inputs.script }}" > panels/${{ inputs.panelName }}/render.js
-          sudo echo "${{ inputs.query }}" > panels/${{ inputs.panelName }}/query.json
+          sudo echo '${{ inputs.query }}' > panels/${{ inputs.panelName }}/query.json
           sudo echo "${{ inputs.sql }}" > panels/${{ inputs.panelName }}/template.sql
           ls -l panels/${{ inputs.panelName }}
 

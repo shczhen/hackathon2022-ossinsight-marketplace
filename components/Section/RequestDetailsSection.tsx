@@ -18,8 +18,9 @@ export default function RequestDetails(props: {
   data: panelItem;
   description: string;
   parameters: QueryParameterItemType[];
+  chart?: React.ReactNode;
 }) {
-  const { id, title, data, description, parameters } = props;
+  const { id, title, data, description, parameters, chart } = props;
 
   return (
     <Layout
@@ -38,6 +39,8 @@ export default function RequestDetails(props: {
             <Link href={Pages.Panels}>My Panels</Link>
             <Typography color="text.primary">{title}</Typography>
           </Breadcrumbs>
+
+          <Box>{chart}</Box>
 
           <Box
             sx={{

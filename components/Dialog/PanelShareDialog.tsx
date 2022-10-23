@@ -73,7 +73,7 @@ function generateShareLink(
   panelId: string,
   parameters: QueryParameterItemType[]
 ) {
-  let result = `/panels/${panelId}?`;
+  const result = `/panels/${panelId}?type=share&`;
   const params = parameters.map((item) => {
     return `${item.name}=<${item.type}>`;
   });

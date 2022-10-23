@@ -44,7 +44,7 @@ export default function ResultSQLTab(props: { data: QueryResult | null }) {
             padding: '1rem 0',
           }}
         >{`Finished in ${totalCost}s. (AP ${
-          isAP ? 'disabled' : 'enabled'
+          isAP ? 'enabled' : 'disabled'
         })`}</Typography>
       )}
       <BrowserOnlyReactJson src={result || {}} />

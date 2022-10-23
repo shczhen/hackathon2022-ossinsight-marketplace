@@ -140,7 +140,7 @@ export default function SQLStep(props: { onChange?: (value: string) => void }) {
   return (
     <Box
       sx={{
-        height: 200,
+        height: 500,
       }}
     >
       <Editor

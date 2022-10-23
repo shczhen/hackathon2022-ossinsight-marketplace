@@ -14,8 +14,8 @@ import NewRequest from 'components/Section/NewRequest';
 const NewRequestPage: NextPage = () => {
   return (
     <Layout
-      title="OssInsight Marketplace | New Request"
-      description="Create your own plugin here"
+      title="OssInsight Marketplace | New Panel"
+      description="Create your own panel here"
     >
       <Container maxWidth="xl">
         <Box paddingTop="2rem" paddingBottom="2rem">
@@ -27,7 +27,7 @@ const NewRequestPage: NextPage = () => {
           >
             <Link href={Pages.Home}>Home</Link>
             <Link href={Pages.Panels}>My Panels</Link>
-            <Typography color="text.primary">Create New Request</Typography>
+            <Typography color="text.primary">Create New Panel</Typography>
           </Breadcrumbs>
 
           <NewRequest />

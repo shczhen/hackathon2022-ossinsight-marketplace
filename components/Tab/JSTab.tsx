@@ -49,7 +49,7 @@ export default function JSTab(props: JSTabProps) {
   return (
     <Box
       sx={{
-        height: 200,
+        height: 500,
       }}
     >
       <Editor

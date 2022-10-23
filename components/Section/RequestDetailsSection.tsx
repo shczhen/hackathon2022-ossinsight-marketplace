@@ -18,8 +18,9 @@ export default function RequestDetails(props: {
   data: panelItem;
   description: string;
   parameters: QueryParameterItemType[];
+  chart?: React.ReactNode;
 }) {
-  const { id, title, data, description, parameters } = props;
+  const { id, title, data, description, parameters, chart } = props;
 
   return (
     <Layout
@@ -39,13 +40,31 @@ export default function RequestDetails(props: {
             <Typography color="text.primary">{title}</Typography>
           </Breadcrumbs>
 
+          <Box>{chart}</Box>
+
           <Box
             sx={{
               display: 'flex',
               justifyContent: 'flex-end',
+              gap: '2rem',
             }}
           >
-            <PanelShareDialog parameters={parameters} panelId={id} />
+            <PanelShareDialog
+              parameters={parameters}
+              panelId={id}
+              type="iframe"
+              label="Share Iframe"
+              title="Share this panel by iframe"
+              description="Use this link as iframe src to share this panel with your friends."
+            />
+            <PanelShareDialog
+              parameters={parameters}
+              panelId={id}
+              type="svg"
+              label="Share SVG"
+              title="Share this panel by SVG"
+              description="Use this link as SVG src to share this panel with your friends."
+            />
           </Box>
 
           <Typography variant="h4" component="h2" gutterBottom>

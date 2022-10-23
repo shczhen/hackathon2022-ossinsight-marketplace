@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 import BrowserOnlyReactJson from 'components/BrowserOnly/ReactJsonView';
-import { QueryResult } from 'pages/api/sql/execute';
+import { QueryResult } from 'packages/db/db';
 
 const MOCK_SQL_RESULT_JSON = {
   data: [
@@ -44,7 +44,7 @@ export default function ResultSQLTab(props: { data: QueryResult | null }) {
             padding: '1rem 0',
           }}
         >{`Finished in ${totalCost}s. (AP ${
-          isAP ? 'disabled' : 'enabled'
+          isAP ? 'enabled' : 'disabled'
         })`}</Typography>
       )}
       <BrowserOnlyReactJson src={result || {}} />

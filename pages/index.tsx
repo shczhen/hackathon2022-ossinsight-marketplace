@@ -1,5 +1,9 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { serialize } from 'next-mdx-remote/serialize';
+import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
+import { readdirSync, readFileSync } from 'fs';
+import { join } from 'path';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -8,8 +12,15 @@ import ReviewsIcon from '@mui/icons-material/Reviews';
 
 import Layout from 'components/Layout';
 import { Pages } from 'lib/constants';
+import 'github-markdown-css/github-markdown-light.css';
+import { panelItem } from 'pages/panels';
+import PluginCard from 'components/Card/PluginCard';
 
-const Home: NextPage = () => {
+const Home: NextPage<{ results: panelItem[] }> = (props: {
+  results: panelItem[];
+}) => {
+  const { results } = props;
+
   const router = useRouter();
 
   return (
@@ -47,9 +58,69 @@ const Home: NextPage = () => {
             </Button>
           </Box>
         </Box>
+        {/* <Box className="markdown-body">
+          <MDXRemote {...props.source} />
+        </Box> */}
+        <Box>
+          {results.map((panel) => {
+            const panelData = JSON.parse(panel.panel);
+            return (
+              <Box
+                key={panel.name}
+                sx={{
+                  height: 400,
+                  width: 300,
+                }}
+              >
+                <PluginCard
+                  id={panel.name}
+                  title={panelData.title}
+                  desc={panelData.description}
+                  author={panelData.author}
+                />
+              </Box>
+            );
+          })}
+        </Box>
       </Container>
     </Layout>
   );
 };
+
+// This function gets called at build time on server-side.
+// It won't be called on client-side, so you can even do
+// direct database queries.
+export async function getStaticProps() {
+  // Call an external API endpoint to get posts.
+  // You can use any data fetching library
+  // const res = await fetch('https://.../posts');
+  // const posts = await res.json();
+  const BASE_PATH = process.cwd();
+  const panels = readdirSync(join(BASE_PATH, 'configs/panels'));
+  // console.log(panels);
+  const results: panelItem[] = [];
+  panels.forEach((panel) => {
+    const panelPath = join(BASE_PATH, 'configs/panels', panel);
+    const panelJsonStr = readFileSync(join(panelPath, 'panel.json'));
+    const queryJsonStr = readFileSync(join(panelPath, 'query.json'));
+    const renderJsBuf = readFileSync(join(panelPath, 'render.js'));
+    const templateSqlBuf = readFileSync(join(panelPath, 'template.sql'));
+    results.push({
+      name: panel,
+      panel: panelJsonStr.toString(),
+      query: queryJsonStr.toString(),
+      js: renderJsBuf.toString(),
+      sql: templateSqlBuf.toString(),
+    });
+  });
+
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return {
+    props: {
+      results,
+    },
+  };
+}
 
 export default Home;

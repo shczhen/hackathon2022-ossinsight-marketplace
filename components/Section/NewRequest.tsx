@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { VariantType, useSnackbar } from 'notistack';
+import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 
 import SQLTab, { PLACEHOLDER_SQL } from 'components/Tab/SQLTab';
 import JSTab, { PLACEHOLDER_JS } from 'components/Tab/JSTab';
@@ -15,7 +17,7 @@ import ResultEchartsTab from 'components/Tab/ResultEchartsTab';
 import SubmitPanelDialog from 'components/Dialog/SubmitPanelDialog';
 
 import axios from 'lib/axios';
-import { QueryResult } from 'pages/api/sql/execute';
+import { QueryResult } from 'packages/db/db';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -139,93 +141,99 @@ export default function NewRequestSection() {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex' }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          <Tab label="SQL" {...a11yProps(0)} />
-          <Tab label="JS Scritps" {...a11yProps(1)} />
-        </Tabs>
-        <Box
-          sx={{
-            marginLeft: 'auto',
-          }}
-        >
-          <LoadingButton
-            variant="contained"
-            disabled={sqlValue === ''}
-            onClick={handleSubmitSQL}
-            loading={sqlLoading}
+      <Grid container spacing={2}>
+        <Grid xs={6}>
+          <Box
             sx={{
-              display: value === 0 ? 'inline-flex' : 'none',
+              borderBottom: 1,
+              borderColor: 'divider',
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
-            Run SQL
-          </LoadingButton>
-          <Button
-            variant="contained"
-            disabled={jsCodeValue === ''}
-            onClick={handleSubmitJSCode}
-            sx={{
-              display: value === 1 ? 'inline-flex' : 'none',
-            }}
-          >
-            Run Scripts
-          </Button>
-        </Box>
-      </Box>
-      <Box display={value === 0 ? 'block' : 'none'}>
-        <SQLTab onChange={handleEditorInputChange('sql')} />
-      </Box>
-      <Box display={value === 1 ? 'block' : 'none'}>
-        <JSTab onChange={handleEditorInputChange('js')} />
-      </Box>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="basic tabs example"
+            >
+              <Tab label="SQL" {...a11yProps(0)} />
+              <Tab label="JS Scritps" {...a11yProps(1)} />
+            </Tabs>
+            <Box
+              sx={{
+                marginLeft: 'auto',
+              }}
+            >
+              <LoadingButton
+                // variant="contained"
+                disabled={sqlValue === ''}
+                onClick={handleSubmitSQL}
+                loading={sqlLoading}
+                startIcon={<PlayCircleIcon fontSize="inherit" />}
+                sx={{
+                  display: value === 0 ? 'inline-flex' : 'none',
+                }}
+              >
+                Run SQL
+              </LoadingButton>
+              <Button
+                // variant="contained"
+                disabled={jsCodeValue === ''}
+                onClick={handleSubmitJSCode}
+                startIcon={<PlayCircleIcon fontSize="inherit" />}
+                sx={{
+                  display: value === 1 ? 'inline-flex' : 'none',
+                }}
+              >
+                Run Scripts
+              </Button>
+            </Box>
+          </Box>
+          <Box display={value === 0 ? 'block' : 'none'}>
+            <SQLTab onChange={handleEditorInputChange('sql')} />
+          </Box>
+          <Box display={value === 1 ? 'block' : 'none'}>
+            <JSTab onChange={handleEditorInputChange('js')} />
+          </Box>
+        </Grid>
 
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs
-          value={resultTabValue}
-          onChange={handleResultTabChange}
-          aria-label="result tabs"
-        >
-          <Tab label="query" {...a11yProps(0, 'result')} />
-          <Tab label="results" {...a11yProps(1, 'result')} />
-          <Tab label="echart" {...a11yProps(2, 'result')} />
-        </Tabs>
-      </Box>
-      <Box
-        sx={{
-          height: 500,
-          overflow: 'auto',
-        }}
-      >
-        <Box display={resultTabValue === 0 ? 'block' : 'none'}>
-          <ResultSQLTab data={sqlResult} />
-        </Box>
-        <Box display={resultTabValue === 1 ? 'block' : 'none'}>
-          <ResultJSTab data={jsCodeResult} />
-        </Box>
-        <Box display={resultTabValue === 2 ? 'block' : 'none'}>
-          <ResultEchartsTab data={jsCodeResult} />
-        </Box>
-      </Box>
+        <Grid xs={6}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs
+              value={resultTabValue}
+              onChange={handleResultTabChange}
+              aria-label="result tabs"
+            >
+              <Tab label="query" {...a11yProps(0, 'result')} />
+              <Tab label="results" {...a11yProps(1, 'result')} />
+              <Tab label="echart" {...a11yProps(2, 'result')} />
+            </Tabs>
+          </Box>
+          <Box
+            sx={{
+              height: 500,
+              overflow: 'auto',
+            }}
+          >
+            <Box display={resultTabValue === 0 ? 'block' : 'none'}>
+              <ResultSQLTab data={sqlResult} />
+            </Box>
+            <Box display={resultTabValue === 1 ? 'block' : 'none'}>
+              <ResultJSTab data={jsCodeResult} />
+            </Box>
+            <Box display={resultTabValue === 2 ? 'block' : 'none'}>
+              <ResultEchartsTab data={jsCodeResult} />
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'flex-end',
         }}
       >
-        {/* <Button
-          variant="contained"
-          disabled={!(sqlValue && jsCodeValue && jsCodeResult)}
-          onClick={handleSubmitReview}
-          sx={{
-            margin: '2rem 0',
-          }}
-        >
-          Submit
-        </Button> */}
         <SubmitPanelDialog
           sql={sqlValue}
           js={jsCodeValue}

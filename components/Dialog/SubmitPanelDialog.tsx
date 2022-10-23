@@ -9,6 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import PublishIcon from '@mui/icons-material/Publish';
 import TextField from '@mui/material/TextField';
+import { VariantType, useSnackbar } from 'notistack';
 
 import _ from 'lodash';
 import axios from 'lib/axios';
@@ -80,7 +81,7 @@ export default function SubmitPanelDialog(props: SubmitPanelDialogProps) {
   const [isNameValid, setIsNameValid] = React.useState(false);
   const [isParamStrValid, setIsParamStrValid] = React.useState(false);
 
-  const [error, setError] = React.useState<any>(null);
+  const { enqueueSnackbar } = useSnackbar();
 
   React.useEffect(() => {
     const nameTest = name.trim().replaceAll(/\w/g, '').replaceAll(/\-/g, '');
@@ -110,7 +111,6 @@ export default function SubmitPanelDialog(props: SubmitPanelDialogProps) {
   };
 
   const handleSubmit = async (): Promise<void> => {
-    setError(null);
     setLoading(true);
 
     const panelClone = _.cloneDeep(DEFAULT_PANEL_JSON);
@@ -120,7 +120,7 @@ export default function SubmitPanelDialog(props: SubmitPanelDialogProps) {
     panelClone.description = description;
     queryClone.name = title;
     queryClone.description = description;
-    queryClone.parameters = JSON.parse(paramStr);
+    queryClone.parameters = paramStr ? JSON.parse(paramStr) : [];
 
     try {
       await axios
@@ -132,8 +132,13 @@ export default function SubmitPanelDialog(props: SubmitPanelDialogProps) {
         })
         .then((res) => res.data);
       handleClose();
+      enqueueSnackbar(`Submit successfully.`, {
+        variant: 'success',
+      });
     } catch (error: any) {
-      setError(error);
+      enqueueSnackbar(`${error?.response?.data?.message || error.message}`, {
+        variant: 'error',
+      });
       console.error(error);
     } finally {
       setLoading(false);
@@ -219,6 +224,7 @@ export default function SubmitPanelDialog(props: SubmitPanelDialogProps) {
           <LoadingButton
             onClick={handleSubmit}
             autoFocus
+            loading={loading}
             disabled={!isNameValid || !isParamStrValid || name === ''}
           >
             Submit

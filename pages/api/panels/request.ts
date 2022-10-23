@@ -4,8 +4,8 @@ import { authOptions } from '../auth/[...nextauth]';
 import { getOctokit } from 'lib/github';
 import { Panel } from 'types/panel.schema';
 import { Query } from 'mysql';
-import { APIError } from '../sql/execute';
 import winston from 'winston';
+import { APIError } from 'types/common';
 
 declare module 'next-auth' {
   interface Session {

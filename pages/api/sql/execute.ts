@@ -25,8 +25,8 @@ export default async function handler(
     const result = await executeQuery(conn, APConn, TPConn, sql);
     res.status(200).send(result);
   } catch(err:any) {
-    console.log('Failed to execute adhoc query: ', sql, err);
-    let code = 500, message = 'Failed to execute adhoc query.';
+    console.log('Failed to execute this query: ', sql, err);
+    let code = 500, message = 'Failed to execute this query.';
     if (err instanceof APIError) {
       code = err.code;
       message = err.message;

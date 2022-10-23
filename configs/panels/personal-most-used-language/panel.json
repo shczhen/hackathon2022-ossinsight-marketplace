@@ -1,0 +1,14 @@
+{
+  "title": "Personal most used language",
+  "name": "personal-most-used-language",
+  "topic": [],
+  "description": "",
+  "query": {
+    "definition": "./query.json",
+    "template": "./template.sql",
+    "ignoreCache": true
+  },
+  "render": { "cache": { "ttl": 3600 }, "src": "./render.js" },
+  "author": [],
+  "shared": true
+}
